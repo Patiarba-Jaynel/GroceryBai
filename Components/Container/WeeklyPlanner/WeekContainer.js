@@ -7,14 +7,16 @@ export default function WeekContainer(props) {
 
      return (
      <View style={{marginBottom: 10}}>
-          <View style={style.weekContainer}>
-               <View style={{margin: 20}}>
-                    <Text variant='labelLarge'>{props.week}</Text>
+          <TouchableOpacity onPress={props.onPress}>
+               <View style={style.weekContainer}>
+                    <View style={{margin: 20}}>
+                         <Text variant='labelLarge'>{props.week}</Text>
+                    </View>
+                    <View style={{margin: 10}}>
+                         <Text variant='labelMedium'><Icon source={'cart'} size={20}></Icon>: ₱ {props.total}</Text>
+                    </View>
                </View>
-               <View style={{margin: 10}}>
-                    <Text variant='labelMedium'><Icon source={'cart'} size={20}></Icon>: ₱ {props.total}</Text>
-               </View>
-          </View>
+          </TouchableOpacity>
      </View>
      )
 }

@@ -34,15 +34,13 @@ export default function Planner({ navigation }) {
                     <View style={{alignItems: 'center', bottom: 450, left: 35, position: 'absolute'}}>
                          <Text variant='titleLarge' style={{fontWeight: 'bold'}}>Grocery Weekly Planner</Text>
                     </View>
-                         <TouchableOpacity  onPress={ () => {
-                              navigation.navigate('Login')
-                         }}>
+                         <View>
                               {
                                    list.map((list, index) => {
-                                        return <WeekContainer week={list.price} total={list.price} key={index}/>
+                                        return <WeekContainer week={list.price} total={list.price} key={index} onPress={() => (navigation.navigate('ListContainer'))}/>
                                    })
                               }
-                         </TouchableOpacity>
+                         </View>
                     <View>
                          <Button mode='contained-tonal' buttonColor='#18B127' textColor='white' icon={"clipboard-list-outline"}
                          onPress={() => (Alert.alert('You have click this button', 'nice'))}>Add New Weekly Planner</Button>

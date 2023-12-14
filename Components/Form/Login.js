@@ -27,7 +27,7 @@ export default function Login1( { navigation }) {
 
                          const token = await SecureStore.setItemAsync('token', userLogin.token)
 
-                         navigation.replace('Profile')
+                         navigation.replace('Planner')
                     }}
                     validationSchema={loginSchema}
                     initialValues={{email: '', password: ''}}>
