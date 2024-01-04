@@ -1,5 +1,5 @@
 
-import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView } from 'react-native'
+import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, SafeAreaView } from 'react-native'
 
 import { Text,Icon, Button } from 'react-native-paper'
 
@@ -29,11 +29,12 @@ export default function Planner({ navigation }) {
           )
      }
      return (
-          <KeyboardAvoidingView style={style.container}>
+          <SafeAreaView style={style.container}>
                <View>
                     <View style={{alignItems: 'center', bottom: 450, left: 35, position: 'absolute'}}>
                          <Text variant='titleLarge' style={{fontWeight: 'bold'}}>Grocery Weekly Planner</Text>
                     </View>
+                    
                          <View>
                               {
                                    list.map((list, index) => {
@@ -46,7 +47,7 @@ export default function Planner({ navigation }) {
                          onPress={() => (Alert.alert('You have click this button', 'nice'))}>Add New Weekly Planner</Button>
                     </View>
                </View>
-          </KeyboardAvoidingView>
+          </SafeAreaView>
      )
 }
 

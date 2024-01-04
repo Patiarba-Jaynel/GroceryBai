@@ -1,17 +1,25 @@
-import { Button, TextInput, Text, HelperText} from 'react-native-paper'
+import { Button, TextInput, Text, HelperText, ActivityIndicator} from 'react-native-paper'
 import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { loginSchema } from '../../utils/schema'
 import { Login } from '../../api/account/login'
 
 import * as SecureStore from 'expo-secure-store';
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useState } from 'react'
 
+import Loading from '../miscsCompontent/Loading'
 
 
 export default function Login1( { navigation }) {
+
+     const [isLoading, setLoading] = useState(false);
+
      return (
-          <KeyboardAvoidingView style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-               <View style={{margin: 100}}>
+          
+          <SafeAreaView style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+               <Loading loading={isLoading}></Loading>
+               <View style={{margin: 30}}>
                     <Text variant='titleLarge' style={style.boldText}>Sign In</Text>
                </View>
 
@@ -21,13 +29,16 @@ export default function Login1( { navigation }) {
                <View style={style.inputContainer}>
                     <Formik
                     onSubmit={ async (values)=> {
+                         setLoading(true)
                          const userLogin =  await Login(JSON.stringify(values))
 
-                         if (userLogin.error) return Alert.alert("User and Password is Invalid", userLogin.message)
+                         if (userLogin.error) return Alert.alert("User and Password is Invalid", userLogin.message);
 
+                         
                          const token = await SecureStore.setItemAsync('token', userLogin.token)
 
-                         navigation.replace('Planner')
+                         navigation.replace('Screen')
+                         setLoading(false)
                     }}
                     validationSchema={loginSchema}
                     initialValues={{email: '', password: ''}}>
@@ -36,7 +47,8 @@ export default function Login1( { navigation }) {
                                    <View style={{alignItems: 'center'}}>
                                         <View>
                                              <TextInput
-                                                  mode='outlined'
+                                                  mode='flat'
+                                                  activeUnderlineColor='green'
                                                   activeOutlineColor='green'
                                                   placeholder='Enter your Email'
                                                   onChangeText={handleChange('email')}
@@ -49,8 +61,8 @@ export default function Login1( { navigation }) {
                                         </View>
                                         <View>
                                              <TextInput
-                                                  mode='outlined'
-                                                  activeOutlineColor='green'
+                                                  mode='flat'
+                                                  activeUnderlineColor='green'
                                                   placeholder='Enter Your Password'
                                                   secureTextEntry={true}
                                                   onChangeText={handleChange('password')}
@@ -98,7 +110,7 @@ export default function Login1( { navigation }) {
                </View>
                
 
-          </KeyboardAvoidingView>
+          </SafeAreaView>
      )
 }
 
@@ -106,7 +118,7 @@ export default function Login1( { navigation }) {
 
 const style = StyleSheet.create({
      container: {
-          backgroundColor: "#fff",
+          backgroundColor: "#F5F5F8",
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
@@ -117,7 +129,7 @@ const style = StyleSheet.create({
           fontWeight: 'bold'
      },
      Input: {
-          backgroundColor: 'white',
+          backgroundColor: 'transparent',
           width: 300,
           borderRadius: 100,
           margin: 10
@@ -127,5 +139,14 @@ const style = StyleSheet.create({
           alignItems: 'center',
           flex: 2,
           margin: 1
-     }
+     },
+     loading: {
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
 })

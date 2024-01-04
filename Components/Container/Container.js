@@ -1,4 +1,4 @@
-import {View, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Alert, ImageBackground} from 'react-native';
 import {Text} from 'react-native-paper';
 import { Button } from 'react-native-paper';
 import { Image } from 'expo-image';
@@ -16,12 +16,15 @@ function Container(item) {
      return (
           <TouchableOpacity onPress={item.onPress} style={{display: `${item.display}`}}>
                <View style={style.container}>
-                    <View>
-                         <Image  source={item.image} style={{ height: 100, width: 100, margin: 20}} contentFit='cover' transition={1000} placeholder={blurhash}/>
+                    {/** 
+                    <View style={style.imageContainer}>
+                         <Image  source={item.image} style={style.image} contentFit='cover' transition={1000} placeholder={blurhash}/>
                     </View>
+     */}
+                    <Image source={item.image} style={style.image}></Image>
                     <View style={{ alignItems: 'center', justifyContent: 'center'}}>
-                         <Text style={{margin: 10, textAlign: 'center'}}>{item.name}</Text>
-                         <Text style={{fontWeight: "bold"}}>₱{item.price}</Text>
+                         <Text style={{margin: 5, textAlign: 'center', textAlignVertical: 'auto'}}>{item.name}</Text>
+                         <Text style={{fontWeight: "bold", color:'#18B127'}}>₱{item.price}</Text>
                     </View>
                </View>
           </TouchableOpacity>
@@ -35,10 +38,10 @@ const style = StyleSheet.create({
      {
           backgroundColor: 'white',
           display: 'flex',
-          width: 150, 
+          width: 170, 
           height: 250, 
           alignItems: 'center', 
-          borderRadius: 5, 
+          borderRadius: 20, 
           margin: 10,
           shadowColor: "#000",
           shadowOffset: {
@@ -49,5 +52,25 @@ const style = StyleSheet.create({
           shadowRadius: 2.22,
           elevation: 3,
      },
-
+     image: {
+          borderTopEndRadius: 20,
+          borderTopLeftRadius: 20,
+          width: 170,
+          height: 150,
+          marginBottom: 10
+     },
+     imageContainer: 
+     {
+          borderRadius: 100,
+          backgroundColor: 'white', 
+          margin: 5,
+          shadowColor: "green",
+          shadowOffset: {
+               width: 0,
+               height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          elevation: 3,
+     }
 })

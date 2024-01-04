@@ -6,6 +6,9 @@ import * as SecureStore from 'expo-secure-store'
 
 import URL from "../../api/constants";
 import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 
@@ -37,21 +40,21 @@ export default function Profile( { navigation }) {
      }, [])
 
      return (
-     <KeyboardAvoidingView style={style.container}>
+     <SafeAreaView style={style.container}>
           <View>
-               <View style={{flex: 1, margin: 100, alignItems: 'center'}}>
-                    <View style={{marginBottom: 100}}>
+               <View style={{flex: 1, margin: 20, alignItems: 'center'}}>
+                    <View style={{marginBottom: 50}}>
                          <Text variant="titleLarge" style={{fontWeight: 'bold'}}>Personal details</Text>
                     </View>
 
                     <View style={{alignItems: 'center'}}>
-                         <TouchableOpacity style={{marginBottom: 50}}>
-                              <View style={{marginBottom: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
+                         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom:10}}>
                                    <Text variant="titleSmall">Personal Information</Text>
-                                   <Text variant="titleSmall" style={{color: 'green'}}>change</Text>
-                              </View>
+                         </View>
+                         <TouchableOpacity style={{marginBottom: 50}}>
 
-                              <View style={{borderColor: 'black', backgroundColor: 'white', width: 400, height: 200, borderRadius: 20, flexDirection:'row', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+
+                              <View style={{borderColor: 'black', backgroundColor: 'white', width: 350, height: 200, borderRadius: 20, flexDirection:'row', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
                                    <View style={{ backgroundColor:'white', borderRadius: 10, alignItems:'center', height: 100, marginTop: 50, marginLeft: 50}}>
                                         <Image source={require('../../assets/google.png')} style={{ height: 100, width: 100}}></Image>
                                    </View>
@@ -65,28 +68,43 @@ export default function Profile( { navigation }) {
                          </TouchableOpacity>
                     
                          <View>
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 50, width: 400, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
-                                   <TouchableOpacity>
-                                        <Text style={{marginLeft: 30}} variant='titleMedium'>Added Items</Text>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                                        <Text style={{marginLeft: 20}}variant='titleMedium'>
+                                             Added Items
+                                        </Text>
+                                        <Text style={{marginRight: 20}}>
+                                             <Icon name="chevron-forward-outline" size={20} color="black" />
+                                        </Text>
                                    </TouchableOpacity>
                               </View>
 
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 50, width: 400, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
-                                   <TouchableOpacity>
-                                        <Text style={{marginLeft: 30}} variant='titleMedium'>Password Reset</Text>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                                        <Text style={{marginLeft: 20}}variant='titleMedium'>
+                                             Password Reset
+                                        </Text>
+                                        <Text style={{marginRight: 20}}>
+                                             <Icon name="chevron-forward-outline" size={20} color="black" />
+                                        </Text>
                                    </TouchableOpacity>
                               </View>
 
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 50, width: 400, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
-                                   <TouchableOpacity>
-                                        <Text style={{marginLeft: 30}} variant='titleMedium'>FAQ</Text>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                                        <Text style={{marginLeft: 20}}variant='titleMedium'>
+                                             FAQ
+                                        </Text>
+                                        <Text style={{marginRight: 20}}>
+                                             <Icon name="chevron-forward-outline" size={20} color="black" />
+                                        </Text>
                                    </TouchableOpacity>
                               </View>
 
 
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 50, width: 400, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
                                    <TouchableOpacity>
-                                        <Text style={{marginLeft: 30, color:'red'}} variant='titleMedium' onPress={async () => {
+                                        <Text style={{marginLeft: 20, color:'red'}} variant='titleMedium' onPress={async () => {
                                              const token = await SecureStore.setItemAsync('token', '')
                                              navigation.navigate('Login')
                                         }}>Logout</Text>
@@ -97,7 +115,7 @@ export default function Profile( { navigation }) {
                     </View>
                </View>
           </View>
-     </KeyboardAvoidingView>
+     </SafeAreaView>
      )
 }
 
@@ -105,7 +123,7 @@ export default function Profile( { navigation }) {
 
 const style = StyleSheet.create({
      container: {
-          backgroundColor: "#fff",
+          backgroundColor: "#F5F5F8",
           flex: 1,
           justifyContent: "center",
           alignItems: "center",

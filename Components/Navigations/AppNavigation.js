@@ -10,9 +10,18 @@ import Product from "../Container/Product";
 import Profile from "../Form/Profile";
 import Planner from "../Container/WeeklyPlanner/Planner";
 import ListContainer from '../../Components/Container/WeeklyPlanner/ListContainer'
+import TabNavigation from "./TabNavigation";
+
+import * as SecureStore from 'expo-secure-store'
 
 const Stack = createNativeStackNavigator() 
 
+
+async function Auth() {
+     if (await SecureStore.getItemAsync('token')) {
+          return true
+     }
+}
 
 
 
@@ -27,7 +36,7 @@ export default function AppNavigation() {
                </Stack.Group>
 
                <Stack.Group>
-                    <Stack.Screen options={{headerShown: false}} name="Home" component={HomeScreen} />
+                    <Stack.Screen options={{headerShown: false}} name="Screen" component={TabNavigation} />
                     <Stack.Screen options={{headerShown: true}} name="AddProduct" component={Product} />
                     <Stack.Screen options={{headerShown: true}} name="Planner" component={Planner} />
                     <Stack.Screen options={{headerShown: true}} name="ListContainer" component={ListContainer} />

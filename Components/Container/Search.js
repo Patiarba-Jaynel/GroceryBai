@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, View, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ActivityIndicator, ScrollView } from "react-native";
 
-import { Text, TextInput } from "react-native-paper";
+import { Text, TextInput, Searchbar } from "react-native-paper";
 import URL from "../../api/constants";
 import Container from "./Container";
 
@@ -34,13 +34,11 @@ export default function Search( { navigation }) {
           )
      }
 
-
-
      return (
           <KeyboardAvoidingView  style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                <View>
-                    <View style={{flex: 1,marginTop: 200  , width:400}}>
-                         <TextInput 
+                    <View>
+                         <Searchbar 
                          mode='outlined'
                          left={<TextInput.Icon icon={"magnify"} />}
                          value={query}
@@ -50,7 +48,7 @@ export default function Search( { navigation }) {
                               }, 1000);
                          }
                               }>
-                         </TextInput>
+                         </Searchbar>
                     </View>
 
                     <View style={{flex: 1, justifyContent:'flex-start'}}>
