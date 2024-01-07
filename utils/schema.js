@@ -9,10 +9,10 @@ const loginSchema = Yup.object().shape({
 
 const registerSchema = Yup.object().shape(
      {    
-          name: Yup.string().required(),
+          first_name: Yup.string().required('First name is required'),
+          last_name: Yup.string().required('Last name is required'),
           email: Yup.string().email().required().lowercase(),
-          password: Yup.string().required('Password is required'),
-          renter_password: Yup.string().required().oneOf([Yup.ref('password'), null], 'Passwords must match')
+          password: Yup.string().required('Password is required')
      }    
 )
 
@@ -22,4 +22,11 @@ const forgotSchema = Yup.object().shape(
      }    
 )
 
-module.exports = { loginSchema, registerSchema, forgotSchema }; 
+const PasswordResetSchema = Yup.object().shape(
+     {
+          otp: Yup.string().required('6 Digit Code is required').length(6),
+          password: Yup.string().required('Password is required')
+     }    
+)
+
+module.exports = { loginSchema, registerSchema, forgotSchema, PasswordResetSchema }; 

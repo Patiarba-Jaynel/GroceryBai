@@ -1,4 +1,4 @@
-import { View, KeyboardAvoidingView, StyleSheet, ActivityIndicator, Alert, Image, TouchableOpacity} from "react-native";
+import { View, KeyboardAvoidingView, StyleSheet, ActivityIndicator, Alert, Image, TouchableOpacity, ScrollView} from "react-native";
 
 import { TextInput, Text } from "react-native-paper";
 
@@ -10,25 +10,37 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import Loading from "../miscsCompontent/Loading";
 
 
 export default function Profile( { navigation }) {
      const [user, setUser] = useState([]);
+     const [isLoading, setLoading] = useState(false);
 
      useEffect(() => {
           async function userMe() {
-               console.log( await SecureStore.getItemAsync('token'))
-               const response = await fetch(`${URL}/api/user/me`, {
-                    headers: {
-                         'Authorization': `Bearer ${ await SecureStore.getItemAsync('token')}`
-                    }
-               })
+               try {
+                    setLoading(true)
+                    console.log( await SecureStore.getItemAsync('token'))
+                    const response = await fetch(`${URL}/api/user/me`, {
+                         headers: {
+                              'Authorization': `Bearer ${ await SecureStore.getItemAsync('token')}`
+                         }
+                    })
+     
+                    if (response.status == 403) {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
+     
+                    const message =  await response.json()
+     
+                    setUser(message)
+     
+                    setLoading(false)
+               } catch (error) {
+                    setLoading(true)
+                    Alert.alert('Error has been occurred', `${error}`)
+                    setLoading(false)
+               }
 
-               if (response.status == 403) {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
-
-               const message =  await response.json()
-
-               setUser(message)
           }
           
           async function Check() {
@@ -52,17 +64,21 @@ export default function Profile( { navigation }) {
                                    <Text variant="titleSmall">Personal Information</Text>
                          </View>
                          <TouchableOpacity style={{marginBottom: 50}}>
-
-
                               <View style={{borderColor: 'black', backgroundColor: 'white', width: 350, height: 200, borderRadius: 20, flexDirection:'row', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
                                    <View style={{ backgroundColor:'white', borderRadius: 10, alignItems:'center', height: 100, marginTop: 50, marginLeft: 50}}>
                                         <Image source={require('../../assets/google.png')} style={{ height: 100, width: 100}}></Image>
                                    </View>
 
-                                   <View style={{margin: 50, marginTop: 70}}>
-                                        <Text variant='titleMedium'>{`${user.first_name} ${user.last_name}`}</Text>
-                                        <Text variant='titleSmall'>{user.email}</Text>
-                                   </View>
+                                   {
+                                        isLoading ? 
+                                        <View style={{alignItems:"center", justifyContent:'center'}}>
+                                             <Loading loading={isLoading}/>
+                                        </View>:
+                                             <View style={{margin: 50, marginTop: 70}}>
+                                                  <Text variant='titleMedium'>{`${user.first_name} ${user.last_name}`}</Text>
+                                                  <Text variant='titleSmall'>{user.email}</Text>
+                                             </View>
+                                   }
 
                               </View>
                          </TouchableOpacity>

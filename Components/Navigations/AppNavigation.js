@@ -11,6 +11,8 @@ import Profile from "../Form/Profile";
 import Planner from "../Container/WeeklyPlanner/Planner";
 import ListContainer from '../../Components/Container/WeeklyPlanner/ListContainer'
 import TabNavigation from "./TabNavigation";
+import ResetScreen from "../Screens/ResetScreen";
+import ResetOTPScreen from "../Screens/ResetOTPScreen";
 
 import * as SecureStore from 'expo-secure-store'
 
@@ -30,14 +32,16 @@ export default function AppNavigation() {
           <NavigationContainer>
           <Stack.Navigator>
                <Stack.Group>
-                    <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
-                    <Stack.Screen options={{headerShown: true}} name="Register" component={RegisterScreen} />
+                    <Stack.Screen options={{headerShown: false}} name="Login" component={Login1} />
+                    <Stack.Screen options={{headerShown: false}} name="Register" component={RegisterScreen} />
+                    <Stack.Screen options={{headerShown: false}} name="Reset" component={ResetScreen} />
+                    <Stack.Screen options={{headerShown: false}} name="OTP" component={ResetOTPScreen} />
                     <Stack.Screen options={{headerShown: false}} name="Profile" component={Profile} />
                </Stack.Group>
 
                <Stack.Group>
                     <Stack.Screen options={{headerShown: false}} name="Screen" component={TabNavigation} />
-                    <Stack.Screen options={{headerShown: true}} name="AddProduct" component={Product} />
+                    <Stack.Screen options={{headerShown: false}} name="AddProduct" component={Product} />
                     <Stack.Screen options={{headerShown: true}} name="Planner" component={Planner} />
                     <Stack.Screen options={{headerShown: true}} name="ListContainer" component={ListContainer} />
                </Stack.Group>

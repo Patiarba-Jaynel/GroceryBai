@@ -1,8 +1,9 @@
-import { Button, TextInput, Text, HelperText, ActivityIndicator, FAB} from 'react-native-paper'
+import { Button, TextInput, Text, HelperText, ActivityIndicator, Icon, IconButton} from 'react-native-paper'
 import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert } from 'react-native'
 import { Formik } from 'formik'
-import { loginSchema } from '../../utils/schema'
+import { PasswordResetSchema } from '../../utils/schema'
 import { Login } from '../../api/account/login'
+import CloseButton from '../miscsCompontent/CloseButton'
 
 import * as SecureStore from 'expo-secure-store';
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -11,74 +12,61 @@ import { useState } from 'react'
 import Loading from '../miscsCompontent/Loading'
 
 
-export default function Login1( { navigation }) {
+export default function OTPReset( { route,  navigation }) {
+
+
+     const email = route.params.userEmail
 
      const [isLoading, setLoading] = useState(false);
 
      return (
-          <SafeAreaView style={style.container}>
+          
+          <SafeAreaView style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                <Loading loading={isLoading}></Loading>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+               <CloseButton navigation={navigation}/>
                <View style={{margin: 30, alignItems:'center'}}>
-                    <Text variant='titleLarge' style={style.boldText}>Sign In</Text>
+                    <Text variant='titleLarge' style={style.boldText}>OTP Code</Text>
                </View>
 
                <View style={{alignItems:'center'}}>
                     <Image source={require('../../assets/grocerylist.png')} style={{height: 250, width: 250}}></Image>
                </View>
-               <View style={style.inputContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+               <View style={style.inputContainer}>
                     <Formik
-                    onSubmit={ async (values)=> {
+                    onSubmit={ async (values) => {
                          try {
-                              setLoading(true)
-                              const userLogin =  await Login(JSON.stringify(values))
-                              
-                              if (userLogin.error) {
-                                   setLoading(false)
-                                   return Alert.alert("Error has been occurred", userLogin.message)
-                              }
-
-                              const token = await SecureStore.setItemAsync('token', userLogin.token)
-     
-                              navigation.replace('Screen')
-                              setLoading(false)
+                              Alert.alert(`${email}`)
                          } catch (error) {
-                              setLoading(true)
-                              Alert.alert('Error has been occurred', `${error}`)
-                              setLoading(false)
+                              Alert.alert('Error Ocurred', `${error}`)
                          }
-
                     }}
-                    validationSchema={loginSchema}
-                    initialValues={{email: '', password: ''}}>
+                    validationSchema={PasswordResetSchema}
+                    initialValues={{otp: '', password: ''}}>
                          {
                               ({ handleChange, values, handleBlur, handleSubmit, errors, touched }) => (
                                    <View style={{alignItems: 'center'}}>
                                         <View>
                                              <TextInput
-                                                  autoCapitalize='none'
                                                   mode='flat'
                                                   activeUnderlineColor='green'
                                                   activeOutlineColor='green'
-                                                  placeholder='Enter your Email'
-                                                  onChangeText={handleChange('email')}
-                                                  value={values.email}
-                                                  error={errors.email && touched.password}
-                                                  onBlur={handleBlur('email')}
+                                                  placeholder='6 Digit Code'
+                                                  onChangeText={handleChange('otp')}
+                                                  value={values.otp}
+                                                  error={errors.otp}
+                                                  onBlur={handleBlur('otp')}
                                                   style={style.Input}>
                                              </TextInput>
-                                             <HelperText type='error'>{errors.email}</HelperText>
-                                        </View>
-                                        <View>
+                                             <HelperText type='error'>{errors.otp}</HelperText>   
                                              <TextInput
-                                                  autoCapitalize='none'
+                                                  secureTextEntry={true}
                                                   mode='flat'
                                                   activeUnderlineColor='green'
-                                                  placeholder='Enter Your Password'
-                                                  secureTextEntry={true}
+                                                  activeOutlineColor='green'
+                                                  placeholder='Password'
                                                   onChangeText={handleChange('password')}
                                                   value={values.password}
-                                                  error={errors.email && touched.password}
+                                                  error={errors.password}
                                                   onBlur={handleBlur('password')}
                                                   style={style.Input}>
                                              </TextInput>
@@ -87,42 +75,27 @@ export default function Login1( { navigation }) {
                                              <Button   
                                                   mode='elevated'
                                                   onPress={handleSubmit}
-                                                  icon={'login'}
+                                                  icon={'send-outline'}
                                                   textColor='black'
                                                   buttonColor='white'
                                                   style={{
                                                        width:250,
                                                        margin: 5
-                                                  }}>Sign In
+                                                  }}>Create New Password
                                              </Button>
                                    </View>
                               )
                          }
                     </Formik>
 
-                    <Button 
-                    mode='elevated'
-                    onPress={
-                         () => (navigation.navigate('Reset'))
-                    }
-                    icon={'login'}
-                    textColor='white'
-                    buttonColor='#00BF63'
-                    style={{
-                         width:250,
-                         marginTop: 5,
-                         margin: 5
-                    }}>Reset Password</Button>
-
                     <View style={{flexDirection:'row', margin: 5, justifyContent: 'space-between'}}>
-                         <Text>Doesn't have account?</Text>
+                         <Text>Didn't received the code?</Text>
                          <TouchableOpacity style={{marginLeft: 10}} onPress={ () => navigation.navigate('Register')}>
-                              <Text style={{color: 'green'}}>Register Here</Text>
+                              <Text style={{color: 'green'}}>Resend</Text>
                          </TouchableOpacity>
                     </View>
                </View>
                
-          </KeyboardAvoidingView>
           </SafeAreaView>
      )
 }
@@ -133,8 +106,6 @@ const style = StyleSheet.create({
      container: {
           backgroundColor: "#F5F5F8",
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
      },
      ImageContainer: {
      },

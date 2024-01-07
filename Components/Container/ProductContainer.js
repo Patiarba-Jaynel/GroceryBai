@@ -6,7 +6,7 @@ import { Image } from 'expo-image';
 const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 
-function Container(item) {
+function ProductContainer(item) {
 
 
      function add() {
@@ -31,7 +31,7 @@ function Container(item) {
      )
 }
 
-export default Container;
+export default ProductContainer;
 
 const style = StyleSheet.create({
      container: 
@@ -49,7 +49,7 @@ const style = StyleSheet.create({
           borderTopEndRadius: 20,
           borderTopLeftRadius: 20,
           width: 170,
-          height: 150,
+          height: 100,
           marginBottom: 10
      },
      imageContainer: 

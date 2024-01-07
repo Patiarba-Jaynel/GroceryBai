@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Image,
   StyleSheet,
   Text,
   View,
@@ -34,6 +35,7 @@ const ListContainer = () => (
       keyExtractor={(item, index) => item + index}
       renderItem={({item}) => (
         <View style={styles.item}>
+          <Image source={require('../../../assets/gorcerybai.png')} style={{width: 50, height: 50}}/>
           <Text style={styles.title}>{item}</Text>
         </View>
       )}
@@ -51,13 +53,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    flexDirection:'row',
+    alignItems:'center',
+    backgroundColor: '#fff',
     padding: 20,
     marginVertical: 8,
+    borderRadius: 30
   },
   header: {
     fontSize: 32,
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,

@@ -5,7 +5,6 @@ import { StyleSheet, Text, ActivityIndicator, View } from "react-native";
 export default function Loading(props){
      const loading = props.loading
 
-     console.log(loading)
 
      if (loading) {
           return (
@@ -29,6 +28,7 @@ const styles = StyleSheet.create({
        width: 100,
        backgroundColor:'#FFFFFF',
        borderRadius: 30,
+       elevation: 5,
        overflow: 'hidden',
      },
      absolute: {
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
           top: 0,
           bottom: 0,
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          elevation: 4
      }
    });

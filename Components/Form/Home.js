@@ -9,16 +9,20 @@ import Empty from '../Container/WeeklyPlanner/Empty'
 
 import URL from '../../api/constants'
 
+import Loading from '../miscsCompontent/Loading'
+
 import { products, chooseCategory, searchProduct }  from '../../api/product/products'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useScrollToTop } from '@react-navigation/native'
+import {IconButton} from 'react-native-paper'
 
-const category_list = ["Fresh Meat & Seafoods", "Fresh Produce", "Frozen Goods", "Ready To Heat & Eat Items", "Ready to Cook", "Chilled & Dairy Items", "International Goods","Bakery", "Pantry", "Snacks", "Beverage", "Health & Beauty", "Babies & Kids", "Home Care", "DIY/Hardware", "Pet Care", "Health & Hygiene Essentials"]
+const category_list = ["Fresh Meat & Seafoods", "Fresh Produce", "Frozen Goods", "Ready To Heat & Eat Items", "Chilled & Dairy Items", "International Goods","Bakery", "Pantry", "Snacks", "Beverage", "Health & Beauty", "Babies & Kids", "Home Care", "DIY/Hardware", "Pet Care", "Health & Hygiene Essentials"]
 
 
 export default function Home( { navigation } ) {
      const ref = useRef(null)
+     const [select, setSelect] = useState(false)
 
      const scrollRef = useRef();
      const [refreshing, setRefreshing] = React.useState(false)
@@ -84,12 +88,52 @@ export default function Home( { navigation } ) {
           )
      }
 
+     function renderItem(){
+          return (
+               <View style={{flex: 1, justifyContent:'flex-start'}}>
+                    <ScrollView
+                    refreshControl={
+                         <RefreshControl refreshing={refreshing} onRefresh={loadItem}></RefreshControl>
+                     }
+                    ref={scrollRef}>
+                         <View style={style.itemContainer}>
+                         {
+                              product.map((items, index) => {
+
+
+                                   return <Container name={items.product.title} price={items.product.price} image={items.product.image_url} category={items.product.category} key={index} onPress={
+                                        () => {
+                                             navigation.navigate('AddProduct', {name: items.product.title, price: items.product.price, image: items.product.image_url, category: items.category})
+                                        }
+                                   } />
+                              })
+                         }
+
+                         </View>
+                    </ScrollView>
+               </View>
+          )
+     }
+
      return (
           <SafeAreaView  style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <View style={{flex: 1}}>
-               <View style={{marginBottom: 10}}>
+               <View style={{marginBottom: 10, flexDirection:'row', alignItems:'center', justifyContent:'center', justifyContent:'space-around'}}>
                     <View style={{alignItems:'center'}}>
-                         <Searchbar iconColor='#000000' loading={isLoading} onSubmitEditing={() => (searchItem(search))} placeholder='Search Item' onChangeText={(value) => {setSearch(value)}} value={search} style={{width: 300, backgroundColor:'#EFEEEE'}}  />
+                         <Searchbar iconColor='#000000' onSubmitEditing={() => (searchItem(search))} placeholder='Search Item' onChangeText={(value) => {setSearch(value)}} value={search} style={{width: 300, backgroundColor:'#EFEEEE'}}  />
+                         
+
+                    </View>
+                    <View>
+                              <TouchableOpacity>
+                              <IconButton
+                                   iconColor='#18B127'
+                                   selected={select}
+                                   icon="heart-outline"
+                                   color={"#EFEEEE"}
+                                   size={30}
+                                   onPress={() => setSelect(true)}/>
+                              </TouchableOpacity>
                     </View>
                </View>
 
@@ -104,27 +148,7 @@ export default function Home( { navigation } ) {
                          }
                     </ScrollView>
                </View>
-               
-               <View style={{flex: 1, justifyContent:'flex-start'}}>
-                    <ScrollView
-                    refreshControl={
-                         <RefreshControl refreshing={refreshing} onRefresh={loadItem}></RefreshControl>
-                     }
-                    ref={scrollRef}>
-                         <View style={style.itemContainer}>
-                         {
-                              product.map((items, index) => {
-                                   return <Container display={setDisplay} name={items.product.title} price={items.product.price} image={items.product.image_url} key={index} onPress={
-                                        () => {
-                                             navigation.navigate('AddProduct', {name: items.product.title, price: items.product.price, image: items.product.image_url})
-                                        }
-                                   } />
-                              })
-                         }
-
-                         </View>
-                    </ScrollView>
-               </View>
+               {isLoading ? <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View> : renderItem()}
           </View>
           </SafeAreaView>
      )
@@ -140,8 +164,7 @@ const style = StyleSheet.create({
      itemContainer: {
           justifyContent:'center',
           flexDirection: 'row', 
-          flexWrap: 'wrap', 
-          justifyContent:'space-evenly'
+          flexWrap: 'wrap',
      },
 
      loading: {
