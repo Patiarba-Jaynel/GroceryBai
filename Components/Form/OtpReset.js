@@ -2,7 +2,7 @@ import { Button, TextInput, Text, HelperText, ActivityIndicator, Icon, IconButto
 import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { PasswordResetSchema } from '../../utils/schema'
-import { Login } from '../../api/account/login'
+import { ResetPassword, SendOTP } from '../../api/account/reset'
 import CloseButton from '../miscsCompontent/CloseButton'
 
 import * as SecureStore from 'expo-secure-store';
@@ -22,7 +22,7 @@ export default function OTPReset( { route,  navigation }) {
      return (
           
           <SafeAreaView style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-               <Loading loading={isLoading}></Loading>
+               <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View>
                <CloseButton navigation={navigation}/>
                <View style={{margin: 30, alignItems:'center'}}>
                     <Text variant='titleLarge' style={style.boldText}>OTP Code</Text>
@@ -35,7 +35,25 @@ export default function OTPReset( { route,  navigation }) {
                     <Formik
                     onSubmit={ async (values) => {
                          try {
-                              Alert.alert(`${email}`)
+                              setLoading(true)
+                              const data = {
+                                   email: email,
+                                   password: values.password,
+                                   otp: values.otp
+                              }
+                              const reset = await ResetPassword(JSON.stringify(data))
+
+                              if (reset.error) {
+                                   setLoading(false)
+                                   return Alert.alert('Error has been occurred', reset.message)
+                              }
+
+                              Alert.alert('Success', reset.message)
+
+                              setLoading(false)
+
+                              navigation.replace('Login')
+
                          } catch (error) {
                               Alert.alert('Error Ocurred', `${error}`)
                          }
@@ -90,7 +108,22 @@ export default function OTPReset( { route,  navigation }) {
 
                     <View style={{flexDirection:'row', margin: 5, justifyContent: 'space-between'}}>
                          <Text>Didn't received the code?</Text>
-                         <TouchableOpacity style={{marginLeft: 10}} onPress={ () => navigation.navigate('Register')}>
+                         <TouchableOpacity style={{marginLeft: 10}} onPress={ async () => {
+                              try {
+                                   setLoading(true)
+                                   const send = await SendOTP(JSON.stringify({email: email}))
+                                   if (send.error) 
+                                   {
+                                        setLoading(false)
+                                        return Alert.alert('Error has been occurred', `${send.message}`)
+                                   }
+                                   Alert.alert('OTP Token has been send', `${send.message}`)
+                                   setLoading(false)
+                              } catch (error) {
+                                   Alert.alert('Error Ocurred', `${error}`)
+                                   
+                              }
+                         }}>
                               <Text style={{color: 'green'}}>Resend</Text>
                          </TouchableOpacity>
                     </View>

@@ -2,7 +2,7 @@ import { Button, TextInput, Text, HelperText, ActivityIndicator, Icon, IconButto
 import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { forgotSchema } from '../../utils/schema'
-import { Login } from '../../api/account/login'
+import { SendOTP } from '../../api/account/reset'
 import CloseButton from '../miscsCompontent/CloseButton'
 
 import * as SecureStore from 'expo-secure-store';
@@ -19,7 +19,7 @@ export default function Reset( { navigation }) {
      return (
           
           <SafeAreaView style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-               <Loading loading={isLoading}></Loading>
+               <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View>
                <CloseButton navigation={navigation}/>
                <View style={{margin: 30, alignItems:'center'}}>
                     <Text variant='titleLarge' style={style.boldText}>Reset Your Password</Text>
@@ -32,8 +32,17 @@ export default function Reset( { navigation }) {
                     <Formik
                     onSubmit={ async (values) => {
                          try {
-                              Alert.alert('OTP Token has been send', `Please check your inbox: ${values.email} email`)
-                              navigation.navigate('OTP', {userEmail: values.email})
+                              setLoading(true)
+                              const send = await SendOTP(JSON.stringify(values))
+
+                              if (send.error) 
+                              {
+                                   setLoading(false)
+                                   return Alert.alert('Error has been occurred', `${send.message}`)
+                              }
+                              Alert.alert('OTP Token has been send', `${send.message}`)
+                              navigation.replace('OTP', {userEmail: values.email})
+                              setLoading(false)
                          } catch (error) {
                               Alert.alert('Error Ocurred', `${error}`)
                          }
