@@ -18,7 +18,10 @@ export default function Product({route, navigation }) {
 
      const [product, setProduct] = useState([])
 
-     const { name, price, image, category } = route.params
+     const { name, image, category } = route.params
+
+     const {image_url, title, price} = route.params.product
+
 
      async function selectCategory(name) {
           chooseCategory(name, setProduct, setLoading)
@@ -36,10 +39,10 @@ export default function Product({route, navigation }) {
                <View style={{justifyContent:'center', alignItems:'center', flex: 2}}>
                     <View style={{}}>
                          <View style={{width: 350, height: 420, backgroundColor: 'white', borderRadius: 30}}>
-                              <Image source={image} style={{height: 300, width: 350, borderTopLeftRadius: 30, borderTopRightRadius: 30}} contentFit='cover' transition={3000}/>
+                              <Image source={image_url} style={{height: 300, width: 350, borderTopLeftRadius: 30, borderTopRightRadius: 30}} contentFit='cover' transition={3000}/>
 
                               <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginBottom: 20, marginTop: 20, margin: 5}}>
-                                   <Text variant='labelLarge' style={{fontWeight:'bold', textAlign: 'auto', fontSize: 15, marginLeft: 10,}}>{name}</Text>
+                                   <Text variant='labelLarge' style={{fontWeight:'bold', textAlign: 'auto', fontSize: 15, marginLeft: 10,}}>{title}</Text>
                                    <Text variant='labelMedium' style={{fontWeight:'bold', textAlign:'left', marginTop: 10, marginLeft: 10, fontSize: 15, color: '#18B127'}}>{category}</Text>
                                    <Text variant='labelMedium' style={{fontWeight:'bold', textAlign:'left', marginTop: 10, marginLeft: 10, fontSize: 15, color: '#18B127'}}>₱{price}</Text>
                               </View>
@@ -59,7 +62,7 @@ export default function Product({route, navigation }) {
                                    setQuantity(quantity + 1)
                               }}></Button>
                          </View>
-                         <Button textColor='black' mode='contained-tonal' buttonColor='#18B127' style={{height: 50, width: 200, justifyContent:'center'}}>Add to List
+                         <Button textColor='white' mode='elevated' buttonColor='#18B127' style={{height: 50, width: 150, justifyContent:'center'}}>Add
                          </Button>
                     </View>
                </View>
@@ -70,7 +73,7 @@ export default function Product({route, navigation }) {
                     <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View>
                     <View>
                          <TouchableOpacity>
-                              <Text variant='labelLarge' style={{fontWeight: 'bold', marginLeft: 10}}>
+                              <Text variant='labelLarge' style={{fontWeight: 'bold', marginLeft: 10, paddingBottom: 10}}>
                                    Similar Product
                               </Text>
                          </TouchableOpacity>
@@ -82,7 +85,7 @@ export default function Product({route, navigation }) {
                                    product.map((items, index) => {
                                         return <ProductContainer name={items.product.title} price={items.product.price} image={items.product.image_url} category={items.product.category} key={index} onPress={
                                              () => {
-                                                  navigation.replace('AddProduct', {name: items.product.title, price: items.product.price, image: items.product.image_url, category: items.category})
+                                                  navigation.replace('AddProduct', {...items})
                                              }
                                         } />
                                    })
@@ -91,7 +94,6 @@ export default function Product({route, navigation }) {
                          </View>
                     </ScrollView>
                </View>
-
 
           </View>
           </SafeAreaView>

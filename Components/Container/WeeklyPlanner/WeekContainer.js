@@ -13,7 +13,7 @@ export default function WeekContainer(props) {
                          <Text variant='labelLarge'>{props.week}</Text>
                     </View>
                     <View style={{margin: 10}}>
-                         <Text variant='labelMedium'><Icon source={'cart'} size={20}></Icon>: ₱ {props.total}</Text>
+                         <Text variant='labelMedium' style={{color:'#18B127'}}><Icon color='gray' source={'cart-outline'} size={20}></Icon>: ₱ {props.total}</Text>
                     </View>
                </View>
           </TouchableOpacity>
@@ -31,15 +31,8 @@ const style = StyleSheet.create({
      },
 
      weekContainer: {
-          backgroundColor: 'white', height: 100, width: 300, borderRadius: 20, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row',
-          shadowColor: "#000",
-          shadowOffset: {
-               width: 0,
-               height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-
-          elevation: 3,
+          backgroundColor: 'white', padding: 5, borderRadius: 20, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row',
+          height: 100,
+          width: 300
      }
 })

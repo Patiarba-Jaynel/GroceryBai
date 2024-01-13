@@ -7,7 +7,6 @@ async function products(setProduct, setLoading, setError) {
      
           const data = await response.json()
      
-     
           setProduct([...data])
           setLoading(false)
      } catch (error) {

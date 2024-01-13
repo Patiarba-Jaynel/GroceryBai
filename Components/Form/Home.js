@@ -92,6 +92,7 @@ export default function Home( { navigation } ) {
           return (
                <View style={{flex: 1, justifyContent:'flex-start'}}>
                     <ScrollView
+                    showsVerticalScrollIndicator={false}
                     refreshControl={
                          <RefreshControl refreshing={refreshing} onRefresh={loadItem}></RefreshControl>
                      }
@@ -103,7 +104,8 @@ export default function Home( { navigation } ) {
 
                                    return <Container name={items.product.title} price={items.product.price} image={items.product.image_url} category={items.product.category} key={index} onPress={
                                         () => {
-                                             navigation.navigate('AddProduct', {name: items.product.title, price: items.product.price, image: items.product.image_url, category: items.category})
+                                             //navigation.navigate('AddProduct', {name: items.product.title, price: items.product.price, image: items.product.image_url, category: items.category})
+                                             navigation.navigate('AddProduct', {...items})
                                         }
                                    } />
                               })
@@ -117,39 +119,37 @@ export default function Home( { navigation } ) {
 
      return (
           <SafeAreaView  style={style.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={{flex: 1}}>
-               <View style={{marginBottom: 10, flexDirection:'row', alignItems:'center', justifyContent:'center', justifyContent:'space-around'}}>
-                    <View style={{alignItems:'center'}}>
-                         <Searchbar iconColor='#000000' onSubmitEditing={() => (searchItem(search))} placeholder='Search Item' onChangeText={(value) => {setSearch(value)}} value={search} style={{width: 300, backgroundColor:'#EFEEEE'}}  />
-                         
-
+               <View style={{flex: 1}}>
+                    <View style={{marginBottom: 10, flexDirection:'row', alignItems:'center', justifyContent:'center', justifyContent:'space-around'}}>
+                         <View style={{alignItems:'center'}}>
+                              <Searchbar iconColor='#000000' onSubmitEditing={() => (searchItem(search))} placeholder='Search Item' onChangeText={(value) => {setSearch(value)}} value={search} style={{width: 300, backgroundColor:'#EFEEEE'}}  />
+                         </View>
+                         <View>
+                                   <TouchableOpacity>
+                                   <IconButton
+                                        iconColor='#18B127'
+                                        selected={select}
+                                        icon="heart-outline"
+                                        color={"#EFEEEE"}
+                                        size={30}
+                                        onPress={() => setSelect(true)}/>
+                                   </TouchableOpacity>
+                         </View>
                     </View>
-                    <View>
-                              <TouchableOpacity>
-                              <IconButton
-                                   iconColor='#18B127'
-                                   selected={select}
-                                   icon="heart-outline"
-                                   color={"#EFEEEE"}
-                                   size={30}
-                                   onPress={() => setSelect(true)}/>
-                              </TouchableOpacity>
-                    </View>
-               </View>
 
-               <View style={{flexDirection: "row", height: 40}}>
-                    <ScrollView horizontal={true} style={{}}>
-                         {
-                              category_list.map((items, index) => {
-                                   return <TouchableOpacity style={{margin: 10}} key={index} value={items} onPress={(() => (item(items)))}>
-                                             <Text>{items}</Text>
-                                          </TouchableOpacity>
-                              })
-                         }
-                    </ScrollView>
+                    <View style={{flexDirection: "row", height: 40}}>
+                         <ScrollView horizontal={true} style={{}}>
+                              {
+                                   category_list.map((items, index) => {
+                                        return <TouchableOpacity style={{margin: 10}} key={index} value={items} onPress={(() => (item(items)))}>
+                                                  <Text>{items}</Text>
+                                             </TouchableOpacity>
+                                   })
+                              }
+                         </ScrollView>
+                    </View>
+                    {isLoading ? <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View> : renderItem()}
                </View>
-               {isLoading ? <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View> : renderItem()}
-          </View>
           </SafeAreaView>
      )
 }

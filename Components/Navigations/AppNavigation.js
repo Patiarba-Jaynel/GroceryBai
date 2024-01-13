@@ -15,7 +15,6 @@ import ResetScreen from "../Screens/ResetScreen";
 import ResetOTPScreen from "../Screens/ResetOTPScreen";
 
 import * as SecureStore from 'expo-secure-store'
-
 const Stack = createNativeStackNavigator() 
 
 
@@ -43,7 +42,7 @@ export default function AppNavigation() {
                     <Stack.Screen options={{headerShown: false}} name="Screen" component={TabNavigation} />
                     <Stack.Screen options={{headerShown: false}} name="AddProduct" component={Product} />
                     <Stack.Screen options={{headerShown: true}} name="Planner" component={Planner} />
-                    <Stack.Screen options={{headerShown: true}} name="ListContainer" component={ListContainer} />
+                    <Stack.Screen options={{headerShown: false}} name="ListContainer" component={ListContainer} />
                </Stack.Group>
 
           </Stack.Navigator>

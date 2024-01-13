@@ -17,6 +17,7 @@ export default function Profile( { navigation }) {
      const [user, setUser] = useState([]);
      const [isLoading, setLoading] = useState(false);
 
+
      useEffect(() => {
           async function userMe() {
                try {
@@ -64,8 +65,8 @@ export default function Profile( { navigation }) {
                                    <Text variant="titleSmall">Personal Information</Text>
                          </View>
                          <TouchableOpacity style={{marginBottom: 50}}>
-                              <View style={{borderColor: 'black', backgroundColor: 'white', width: 350, height: 200, borderRadius: 20, flexDirection:'row', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
-                                   <View style={{ backgroundColor:'white', borderRadius: 10, alignItems:'center', height: 100, marginTop: 50, marginLeft: 50}}>
+                              <View style={{borderColor: 'black', backgroundColor: 'white', width: 350, height: 200, borderRadius: 20, flexDirection:'row'}}>
+                                   <View style={{ backgroundColor:'white', borderRadius: 10, alignItems:'center', height: 100, marginTop: 50, marginLeft: 20}}>
                                         <Image source={require('../../assets/google.png')} style={{ height: 100, width: 100}}></Image>
                                    </View>
 
@@ -74,7 +75,7 @@ export default function Profile( { navigation }) {
                                         <View style={{alignItems:"center", justifyContent:'center'}}>
                                              <Loading loading={isLoading}/>
                                         </View>:
-                                             <View style={{margin: 50, marginTop: 70}}>
+                                             <View style={{margin: 20, marginTop: 70}}>
                                                   <Text variant='titleMedium'>{`${user.first_name} ${user.last_name}`}</Text>
                                                   <Text variant='titleSmall'>{user.email}</Text>
                                              </View>
@@ -84,10 +85,10 @@ export default function Profile( { navigation }) {
                          </TouchableOpacity>
                     
                          <View>
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
                                    <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
-                                             Added Items
+                                             Wishlist
                                         </Text>
                                         <Text style={{marginRight: 20}}>
                                              <Icon name="chevron-forward-outline" size={20} color="black" />
@@ -95,8 +96,8 @@ export default function Profile( { navigation }) {
                                    </TouchableOpacity>
                               </View>
 
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
-                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={() => {navigation.navigate('Reset')}}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
                                              Password Reset
                                         </Text>
@@ -106,7 +107,7 @@ export default function Profile( { navigation }) {
                                    </TouchableOpacity>
                               </View>
 
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
                                    <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
                                              FAQ
@@ -118,7 +119,7 @@ export default function Profile( { navigation }) {
                               </View>
 
 
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center', shadowColor: "#000",shadowOffset: {width: 0,height: 1,},shadowOpacity: 0.22,shadowRadius: 2.22,elevation: 3,}}>
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
                                    <TouchableOpacity>
                                         <Text style={{marginLeft: 20, color:'red'}} variant='titleMedium' onPress={async () => {
                                              const token = await SecureStore.setItemAsync('token', '')

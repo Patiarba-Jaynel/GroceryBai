@@ -9,10 +9,6 @@ const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWX
 function Container(item) {
 
 
-     function add() {
-          Alert.alert("item has been added", "Your item has been added to the list")
-     }
-
      return (
           <TouchableOpacity onPress={item.onPress}>
                <View style={style.container}>
