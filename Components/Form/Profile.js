@@ -3,6 +3,7 @@ import { View, KeyboardAvoidingView, StyleSheet, ActivityIndicator, Alert, Image
 import { TextInput, Text } from "react-native-paper";
 
 import * as SecureStore from 'expo-secure-store'
+import {AsyncStorage} from 'react-native';
 
 import URL from "../../api/constants";
 import { useEffect, useState } from "react";
@@ -32,7 +33,6 @@ export default function Profile( { navigation }) {
                     if (response.status == 403) {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
      
                     const message =  await response.json()
-     
                     setUser(message)
      
                     setLoading(false)
@@ -57,7 +57,7 @@ export default function Profile( { navigation }) {
           <View>
                <View style={{flex: 1, margin: 20, alignItems: 'center'}}>
                     <View style={{marginBottom: 50}}>
-                         <Text variant="titleLarge" style={{fontWeight: 'bold'}}>Personal details</Text>
+                         <Text variant="titleLarge" style={{fontWeight: 'bold'}}>My Profile</Text>
                     </View>
 
                     <View style={{alignItems: 'center'}}>
@@ -66,8 +66,8 @@ export default function Profile( { navigation }) {
                          </View>
                          <TouchableOpacity style={{marginBottom: 50}}>
                               <View style={{borderColor: 'black', backgroundColor: 'white', width: 350, height: 200, borderRadius: 20, flexDirection:'row'}}>
-                                   <View style={{ backgroundColor:'white', borderRadius: 10, alignItems:'center', height: 100, marginTop: 50, marginLeft: 20}}>
-                                        <Image source={require('../../assets/google.png')} style={{ height: 100, width: 100}}></Image>
+                                   <View style={{ backgroundColor:'white', alignItems:'center', height: 100, marginTop: 50, marginLeft: 20, borderRightWidth:1}}>
+                                        <Image source={require('../../assets/google.png')} style={{ height: 100, width: 100, marginRight:10}}></Image>
                                    </View>
 
                                    {
@@ -89,6 +89,17 @@ export default function Profile( { navigation }) {
                                    <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
                                              Wishlist
+                                        </Text>
+                                        <Text style={{marginRight: 20}}>
+                                             <Icon name="chevron-forward-outline" size={20} color="black" />
+                                        </Text>
+                                   </TouchableOpacity>
+                              </View>
+
+                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                                        <Text style={{marginLeft: 20}}variant='titleMedium'>
+                                             Add Custom Product
                                         </Text>
                                         <Text style={{marginRight: 20}}>
                                              <Icon name="chevron-forward-outline" size={20} color="black" />

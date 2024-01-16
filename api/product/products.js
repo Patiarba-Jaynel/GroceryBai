@@ -25,6 +25,16 @@ async function chooseCategory(name, setProduct, setLoading) {
      setLoading(false)
 }
 
+async function chooseCategory1(name, setProduct, setLoading) {
+     setLoading(true)
+     const response = await fetch(`${URL}/api/category1?category=${encodeURIComponent(name)}`)
+
+     const data = await response.json()
+     
+     setProduct([...data])
+     setLoading(false)
+}
+
 async function searchProduct(name, setProduct, setLoading) { 
      setLoading(true)
      const response = await fetch(`${URL}/api/search?item=${encodeURIComponent(name)}`)
@@ -35,4 +45,4 @@ async function searchProduct(name, setProduct, setLoading) {
      setLoading(false)
 }
 
-module.exports = { products, chooseCategory, searchProduct } ;
+module.exports = { products, chooseCategory, searchProduct, chooseCategory1 } ;

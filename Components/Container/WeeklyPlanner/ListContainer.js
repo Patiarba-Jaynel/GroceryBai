@@ -6,9 +6,6 @@ import CloseButton from '../../miscsCompontent/CloseButton';
 import { useEffect, useState } from 'react';
 import { updateList, deleteList } from '../../../api/planner/item'
 
-const blurhash = '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
-
-
 function ListContainer({navigation, route}) {
 
 
@@ -36,62 +33,79 @@ function ListContainer({navigation, route}) {
       navigation.pop()
     }
 
+    //console.log(list)
+    
      return (
-      <SafeAreaView>
-        <CloseButton navigation={navigation}/>
-        <View style={{alignItems:'center', marginBottom: 50}}>
-        <View style={{ alignItems:'center'}}>
-          <Text variant='titleLarge' style={style.boldText}>Your Week List</Text>
-        </View>
-         </View>
-         <View style={{alignItems:'center', justifyContent: 'center'}}>
-          <ScrollView>
-          {
-            list.map((item, index) => {
-              return (
-                <View  key={index}>
-                  <View>
-                    <View style={style.container}>
-                        <Image source={item.image_url} style={style.image}></Image>
-                        <View style={{ alignItems: 'center', justifyContent: 'center'}}>
-                            <Text style={{margin: 5, textAlign: 'center', textAlignVertical: 'auto'}}>{item.title}</Text>
-                            <View style={{alignItems:'center', flexDirection:'row'}}>
-                              <Text style={{fontWeight: "bold", color:'#18B127'}}>₱{item.price}</Text>
-                              <Button icon={'delete-forever-outline'} mode='text' textColor='white' buttonColor='red' style={{marginLeft: 150}} onPress={()=> {
-                                try {
-                                  let NewList = [...list]
-                                  NewList.splice(index, 1)
-                                  json = {
-                                    itemId: ItemId,
-                                    userId: userId,
-                                    items: NewList
-                                  }
-                                  const req = updateList(JSON.stringify(json))
-                                  setList(NewList)
-                                } catch (error) {
-                                  Alert.alert('Error occurred', error)
-                                }
-                              }}>Remove</Button>
-                            </View>
-
-                        </View>
-                    </View>
-                  </View>
+      <SafeAreaView style={{justifyContent: 'center', flex: 1}}>
+              <View style={{flex:1}} >
+                <View>
+                <CloseButton navigation={navigation}/>
                 </View>
-              )
-            })
-          }
-          </ScrollView> 
+                
+                
+                <View style={{alignItems:'center', justifyContent: 'center', marginBottom:10}}>
+                      <Text variant='titleLarge' style={{fontWeight: 'bold', fontSize:30}}>Grocery Weekly Planner</Text>
+                </View>
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                              <ScrollView showsVerticalScrollIndicator={false}> 
+                                <View style={{flex: 1}}>
+                                  {
+                                    list.reverse().map((item, index) => {
+                                      return (
+                                        <View key={index}>
+                                          <View style={style.container}>
+                                            <Image source={item.image_url} style={style.image}></Image>
+                                            <View style={{ alignItems: 'center', justifyContent: 'center'}}>
+                                            <Text style={{textAlign: 'center', flexWrap:'wrap', width:250}}numberOfLines={2}>{item.title}</Text>
+                                            <View style={{alignItems:'center', flexDirection:'row', justifyContent:'space-around'}}>
+                                              <Text style={{marginTop:10, fontWeight: "bold", fontSize:20, color:'#18B127'}}>₱ {item.price}</Text>
+                
+                                            </View>
+                                        </View>
+
+                                        {/* this is an empty space */}
+                                        <View></View>
+
+                                          </View>
+                                          {/* The Remove Bttn */}
+                                          <View style={{marginBottom:30, justifyContent:'center'}} >
+                                          <Button icon={'delete-forever-outline'} mode='text' textColor='white' buttonColor='red' style={{marginLeft: 1, borderTopRightRadius:1, borderTopLeftRadius:1}} onPress={()=> {
+                                                try {
+                                                  let NewList = [...list]
+                                                  NewList.splice(index, 1)
+                                                  json = {
+                                                    itemId: ItemId,
+                                                    userId: userId,
+                                                    items: NewList
+                                                  }
+                                                  const req = updateList(JSON.stringify(json))
+                                                  setList(NewList)
+                                                } catch (error) {
+                                                  Alert.alert('Error occurred', error)
+                                                }
+                                              }}>Remove</Button>
+                                              </View>
+                                          
+                                        </View>
+                                      )
+                                    })
+                                  }
+                                </View>
+                              </ScrollView>
+                              <Divider style={{marginBottom: 150}}/>
+                    </View>
+              </View>
+              <View >
+            <View style={{backgroundColor:'white', padding: 10, borderRadius: 10, flexDirection:'row', alignItems:'center'}}>
+              <Text variant='titleMedium' key={route.params._id}>Total: ₱ {route.params.total}</Text>
+              <View style={{flexDirection:'row', alignSelf:'center', padding: 20,}}>
+                <Button icon={'store-plus-outline'} mode='elevated' textColor='black' buttonColor='white' style={{margin: 10}} onPress={() => {
+                  navigation.navigate('Home')
+                }}>Add more</Button>
+                <Button icon={'delete-outline'} mode='elevated' textColor='white' buttonColor='#18B127' style={{margin: 10}} onPress={() => (deleteList(data, navigation))}>Delete</Button>
+              </View>
+            </View>
           </View>
-          <View style={{backgroundColor:'white', padding: 20, borderRadius: 20, flexDirection:'row', justifyContent:'space-evenly', alignItems:'center'}}>
-            <Text variant='titleMedium' key={route.params._id}>Total: ₱ {route.params.total}</Text>
-            <View style={{flexDirection:'row', alignSelf:'center', padding: 20}}>
-              <Button icon={'store-plus-outline'} mode='elevated' textColor='black' buttonColor='white' style={{margin: 10}} onPress={() => {
-                navigation.navigate('Home')
-              }}>Add more</Button>
-              <Button icon={'delete-outline'} mode='elevated' textColor='white' buttonColor='#18B127' style={{margin: 10}} onPress={() => (deleteList(data, navigation))}>Delete</Button>
-            </View>
-            </View>
         </SafeAreaView>
      )
 }
@@ -100,23 +114,23 @@ export default ListContainer;
 
 const style = StyleSheet.create({
      container: 
-     {  
+     {    
+          justifyContent:'space-between',
           flexDirection:"row",
           backgroundColor: 'white',
-          display: 'flex',
-          padding: 10,
+          // display: 'flex',
+          height: 100,
+          width: 350,
           alignItems: 'center', 
-          borderRadius: 20, 
-          marginBottom: 10,
-          elevation: 3,
+          borderTopEndRadius:20,
+          borderTopStartRadius:20
+          
      },
      image: {
-          borderTopEndRadius: 20,
-          borderTopLeftRadius: 20,
-          height: 100,
-          width: 100,
-          marginBottom: 10,
-          marginRight: 10,
+          borderTopStartRadius: 20,
+          borderBottomLeftRadius: 20,
+          height: 95,
+          width: 90,
      },
      imageContainer: 
      {

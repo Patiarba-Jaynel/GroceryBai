@@ -1,25 +1,67 @@
 
 import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, SafeAreaView } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native';
-import { Text,Icon, Button, List, Modal, Portal, Divider, TextInput } from 'react-native-paper'
+import { Text,Icon, Button, List, Modal, Portal, Divider, TextInput } from 'react-native-paper';
+import DropDown from "react-native-paper-dropdown";
 
 import WeekContainer from './WeekContainer'
 import { useEffect, useState, useCallback } from 'react'
-import { ListItem } from '../../../api/planner/item'
-import {AsyncStorage} from 'react-native';
+import { ListItem, createList } from '../../../api/planner/item'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store'
 import URL from '../../../api/constants'
 import Loading from '../../miscsCompontent/Loading'
 import CloseButton from '../../miscsCompontent/CloseButton'
 import { useIsFocused } from '@react-navigation/native';
-
 import Empty from './Empty'
+
+import PlannerModal from '../../Modal/PlannerModal';
+
 
 export default function Planner({ navigation, route }) {
      const [list1, setList1] = useState([])
      const [totalPrice, setPrice] = useState([])
      const [error, setError] = useState()
      const [plannerLoading, setLoading] = useState(false)
+     const [isEmpty, setIsEmpty] = useState(false)
+     
+
+
+     //for dropdown
+     const [listName, setListName] = useState()
+     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
+     const [showDropDown, setShowDropDown] = useState(false);
+     const [schedule, setSchedule] = useState()
+     const Schedules = [
+          {
+               label: 'Monday',
+               value: 'Monday'
+          },
+          {
+               label: 'Tuesday',
+               value: 'Tuesday'
+          },
+          {
+               label: 'Wednesday',
+               value: 'Wednesday'
+          },
+          {
+               label: 'Thursday',
+               value: 'Thursday'
+          },
+          {
+               label: 'Friday',
+               value: 'Friday'
+          },
+          {
+               label: 'Saturday',
+               value: 'Saturday'
+          },
+          {
+               label: 'Sunday',
+               value: 'Sunday'
+          },
+     ]
      
      async function userMe() {
           try {
@@ -55,20 +97,39 @@ export default function Planner({ navigation, route }) {
      useEffect(() => {
      }, [])
 
+     /*
+     const empty = () => {
+          if (list1.length == 0) {
+               setIsEmpty(true)
+          }
+          else {
+               setIsEmpty(false)
+
+          }
+     }
+     */
+
 
      const isFocused = useIsFocused();
 
-     /**
-     if (list1.length == 0) {
-          return (
-               <Empty title="No Weekly Planner Added" label="Hit the Green button down below to Create a Weekly Planner" buttonTitle="Add New Weekly Planner"/>
-          )
+
+     const createNewList = async (name, schedule) => {
+          try {
+               let data = {
+                    name: name,
+                    items: [],
+                    schedule: schedule
+               }
+               const addList =  await createList(JSON.stringify(data))
+
+               return addList
+          } catch (error) {
+               return error
+          }
      }
-     */
-     const [visible, setVisible] = useState(false);
-     const showModal = () => setVisible(true);
-     const hideModal = () => setVisible(false);
-     const containerStyle = {backgroundColor: 'white', padding: 20, alignSelf: 'center', width: 350, borderRadius: 10};
+
+     //console.log(list1)
+
      return (
           <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center', flex: 1}}>
                <View>
@@ -80,12 +141,12 @@ export default function Planner({ navigation, route }) {
                                    <View>
                                         <View style={{alignItems:'center', justifyContent:'center'}}>
                                              {    
-                                                  isFocused ? list1.map((item, index) => {  
-                                                       return (
-                                                       <WeekContainer week={`Week ${index += 1}`} total={item.total} key={index} onPress={() => (navigation.navigate('ListContainer', {...item, total: item.total}))}/>)
-                                                  })
+                                                  plannerLoading ? <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, elevation: 1, alignSelf: 'center', alignItems:'center'}} ><Loading loading={plannerLoading}></Loading></View>
                                                   :
-                                                  <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 1}} ><Loading loading={plannerLoading}></Loading></View>
+                                                  list1.map((item, index) => { 
+                                                       return (
+                                                       <WeekContainer schedule={item.schedule} date={item.dateCreated} week={item.name} total={item.total} key={index} onPress={() => (navigation.navigate('ListContainer', {...item, total: item.total}))}/>)
+                                                  })
                                                   
                                                   /*list1.map((list, index) => {
                                                        return <WeekContainer week={list._id} total={list.item} key={index} onPress={() => (navigation.navigate('ListContainer'))}/>
@@ -96,24 +157,9 @@ export default function Planner({ navigation, route }) {
                               </ScrollView>
                     <Divider style={{marginBottom: 20}}/>
                     </View>
-
-                    <View style={{flex: 1, alignItems: 'center'}}>
-                         <Portal>
-                              <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                                   <View>
-                                        <Text variant='titleMedium' style={{padding: 10}}>Add New</Text>
-                                        <TextInput style={{marginBottom: 20}}></TextInput>
-                                        <TextInput style={{marginBottom: 20}}></TextInput>
-                                        <TextInput style={{marginBottom: 20}}></TextInput>
-                                        <TextInput style={{marginBottom: 20}}></TextInput>
-                                        <TextInput style={{marginBottom: 20}}></TextInput>
-                                        <Button mode='contained-tonal' textColor='white' buttonColor='#18B127'>Add New List </Button>
-                                   </View>
-                              </Modal>
-                         </Portal>       
-                         <Button mode='contained-tonal' buttonColor='#18B127' textColor='white' icon={"clipboard-list-outline"}
-                         onPress={showModal} style={{height: 40, width: 250}}>Add New Weekly Planner</Button>
-                    </View>
+                    
+                    {/**  Modal */}
+                    <PlannerModal userMe={userMe}/>
                </View>
           </SafeAreaView>
      )

@@ -7,6 +7,7 @@ import { Login } from '../../api/account/login'
 import * as SecureStore from 'expo-secure-store';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Loading from '../miscsCompontent/Loading'
 

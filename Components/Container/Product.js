@@ -1,20 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {TouchableOpacity, View, StyleSheet, KeyboardAvoidingView, Alert, ScrollView} from 'react-native'
 import { Button, Text } from 'react-native-paper'
+import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { chooseCategory }  from '../../api/product/products'
+import { chooseCategory1 }  from '../../api/product/products'
 import ProductContainer from '../Container/ProductContainer'
 import Loading from '../miscsCompontent/Loading';
+import { Portal, Modal, TextInput, } from "react-native-paper"
+import DropDown from "react-native-paper-dropdown";
 
+import { ListItem, updateList, ListItem1 } from '../../api/planner/item'
+
+
+import ProductContainerModal from '../Modal/ProductContainerModal';
 
 import CloseButton from '../miscsCompontent/CloseButton';
 
 export default function Product({route, navigation }) {
-     const [item, setItem] = useState()
-     const [quantity, setQuantity] = useState(0)
+     const [list, setList] = useState([])
+     const [item, setItem] = useState([])
+     const [quantity, setQuantity] = useState(1)
+     const [currentList, setCurrentList] = useState([])
 
      const [isLoading, setLoading ] = useState(false)
+     const [addLoading, setAddLoading] = useState(false)
+     const [isError, setError] = useState(false)
 
      const [product, setProduct] = useState([])
 
@@ -24,13 +35,55 @@ export default function Product({route, navigation }) {
 
 
      async function selectCategory(name) {
-          chooseCategory(name, setProduct, setLoading)
+          chooseCategory1(name, setProduct, setLoading)
      }
+
+     async function LoadItem() {
+          const items = list.item
+          //console.log(items)
+          if (items) {
+               let y = []
+     
+               items.map((data, index) => {
+                    let i = {
+                         label: data.name,
+                         value: data._id
+                    }
+                    y.push(i)
+               })
+               setItem(y)
+          }
+     }
+
+     async function getItem(itemId) {
+          const req = await ListItem1(itemId)
+          const userItem = req.item[0].items
+     }
+
 
      useEffect(() => {
           // write your code here, it's like componentWillMount
-          selectCategory(category)
+
       }, [])
+
+     useFocusEffect(
+          useCallback(() => {
+               selectCategory(category)
+               ListItem(setList, setLoading, setError)
+               //LoadItem()
+          }, [])
+     );
+
+     //modal
+     const [visible, setVisible] = useState(false);
+     const showModal = () => setVisible(true);
+     const hideModal = () => setVisible(false);
+     const containerStyle = {backgroundColor: 'white', padding: 20, alignSelf: 'center', width: 350, borderRadius: 10};
+
+     const [listName, setListName] = useState()
+     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
+     const [showDropDown, setShowDropDown] = useState(false);
+     const [selectedList, setSelectedList] = useState()
 
      return (
           <SafeAreaView style={style.container}>
@@ -62,13 +115,69 @@ export default function Product({route, navigation }) {
                                    setQuantity(quantity + 1)
                               }}></Button>
                          </View>
-                         <Button textColor='white' mode='elevated' buttonColor='#18B127' style={{height: 50, width: 150, justifyContent:'center'}}>Add
+                         <Button textColor='white' mode='elevated' buttonColor='#18B127' style={{height: 50, width: 150, justifyContent:'center'}} onPress={()=>{
+                              showModal()
+                              LoadItem()
+                         }}>Add
                          </Button>
                     </View>
                </View>
+               <View  style={{ alignItems: 'center'}}>
+               <Portal>
+                    <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                         <Text variant='titleMedium' style={{padding: 10}}>Add To List</Text>
+                         {
+                         <DropDown
+                         label={'Insert to'}
+                         mode='flat'
+                         visible={showMultiSelectDropDown}
+                         showDropDown={() => setShowMultiSelectDropDown(true)}
+                         onDismiss={() => setShowMultiSelectDropDown(false)}
+                         value={selectedList}
+                         setValue={setSelectedList}
+                         list={item}
+                         activeColor={'green'}
+                         inputProps={{ style:style.dropDown}}
+                         dropDownItemSelectedStyle={style.dropDown}
+                         //dropDownItemSelectedTextStyle={style.dropDown}
+                         dropDownItemStyle={style.dropDown}
+                         //dropDownItemTextStyle={style.dropDown}
+                         />
+                         }
+                         <View style={{margin: 10}}>
+                              <Button loading={addLoading} mode='contained-tonal' textColor='white' buttonColor='#18B127' onPress={async () => {
+                                   try {
+                                        setAddLoading(true)
+                                        const id = selectedList
+                                        const newItem = {
+                                             image_url:image_url,
+                                             title:title,
+                                             price: price
+                                        }
 
-
+                                        for (let i = 0; i < quantity; i++){
+                                             const req = await ListItem1(id)
+                                             const userItem = req.item[0].items
+                                             const userId = req.item[0].userId
+                                             const update = await updateList(JSON.stringify({
+                                                  itemId: id,
+                                                  userId: userId,
+                                                  items: [...userItem, newItem]
+                                             }))
+                                        }
+                                        setAddLoading(false)
+                                        setVisible(false)
+                                        navigation.pop()
+                                   } catch (error) {
+                                        Alert.alert('Error Occurred', error)
+                                   }
+                              }}>Add New List </Button>
+                         </View>
+                    </Modal>
+               </Portal>
+               </View>
                {/** this is for recommendation */}
+               
                <View style={{flex: 1}}>
                     <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View>
                     <View>
@@ -94,7 +203,7 @@ export default function Product({route, navigation }) {
                          </View>
                     </ScrollView>
                </View>
-
+               
           </View>
           </SafeAreaView>
      )
@@ -112,4 +221,13 @@ const style = StyleSheet.create({
           flexDirection: 'column', 
           flexWrap: 'wrap',
      },
+     Input: {
+          backgroundColor: 'transparent',
+          width: 300,
+          borderRadius: 100,
+          margin: 10
+     },
+     dropDown: {
+          backgroundColor:'white'
+     }
 })

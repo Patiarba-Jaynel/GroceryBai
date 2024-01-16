@@ -20,6 +20,21 @@ async function ListItem(setList1, setLoading, setError) {
 
 }
 
+async function ListItem1(itemId) {
+     try {
+          const response = await fetch(`${URL}/api/user/items?itemId=${itemId}`, {
+               headers: {
+                    'Authorization': `Bearer ${ await SecureStore.getItemAsync('token')}`
+               }
+          })
+          const data = await response.json()
+
+          return data
+     } catch (error) {
+          return error
+     }
+}
+
 
 async function updateList(data1) {
      try {
@@ -61,5 +76,24 @@ async function deleteList(data1, navigation) {
 }
 
 
+async function createList(data1) {
+     try {
+          const response = await fetch(`${URL}/api/user/items`, {
+               'method': 'POST',
+               headers: {
+                    'Authorization': `Bearer ${ await SecureStore.getItemAsync('token')}`,
+                    'Content-Type': 'application/json'
+               },
+               body: data1
+          })
+          const data = await response.json()
+     
+     } catch (error) {
+          console.log(error)
+     }
 
-module.exports = { ListItem, updateList, deleteList }
+}
+
+
+
+module.exports = { ListItem, updateList, deleteList, createList, ListItem1  }

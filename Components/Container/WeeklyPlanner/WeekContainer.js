@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { View, TouchableOpacity, StyleSheet} from 'react-native'
 
-import { Text, Icon } from 'react-native-paper'
+import { Text, Icon, HelperText } from 'react-native-paper'
 
 export default function WeekContainer(props) {
+
+     const date = new Date(props.date).toDateString().replace(' ', ', ');
 
      return (
      <View style={{marginBottom: 10}}>
@@ -11,6 +13,8 @@ export default function WeekContainer(props) {
                <View style={style.weekContainer}>
                     <View style={{margin: 20}}>
                          <Text variant='labelLarge'>{props.week}</Text>
+                         <Text variant='labelMedium' style={{color:'#18B127'}}>{`Grocery for ${props.schedule}`}</Text>
+                         <Text variant='labelSmall' style={{color:'gray'}}>{`Added on ${date}`}</Text>
                     </View>
                     <View style={{margin: 10}}>
                          <Text variant='labelMedium' style={{color:'#18B127'}}><Icon color='gray' source={'cart-outline'} size={20}></Icon>: ₱ {props.total}</Text>
