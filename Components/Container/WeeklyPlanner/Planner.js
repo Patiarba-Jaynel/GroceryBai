@@ -5,7 +5,7 @@ import { Text,Icon, Button, List, Modal, Portal, Divider, TextInput } from 'reac
 import DropDown from "react-native-paper-dropdown";
 
 import WeekContainer from './WeekContainer'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, createContext, useContext } from 'react'
 import { ListItem, createList } from '../../../api/planner/item'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store'
@@ -17,15 +17,16 @@ import Empty from './Empty'
 
 import PlannerModal from '../../Modal/PlannerModal';
 
+import { Context } from '../../../utils/context';
 
 export default function Planner({ navigation, route }) {
+     
      const [list1, setList1] = useState([])
      const [totalPrice, setPrice] = useState([])
      const [error, setError] = useState()
      const [plannerLoading, setLoading] = useState(false)
      const [isEmpty, setIsEmpty] = useState(false)
      
-
 
      //for dropdown
      const [listName, setListName] = useState()
@@ -131,7 +132,7 @@ export default function Planner({ navigation, route }) {
      //console.log(list1)
 
      return (
-          <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center', flex: 1}}>
+          <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor:'#f5f5f5'}}>
                <View>
                     <View style={{flex: 5}}>
                          <View style={{alignItems:'center', justifyContent: 'center', marginBottom: 50}}>
@@ -167,7 +168,7 @@ export default function Planner({ navigation, route }) {
 
 const style = StyleSheet.create({
      container: {
-          backgroundColor: "#F5F5F8",
+          backgroundColor: "#f5f5f5",
           justifyContent: "center",
           alignItems: "center",
      },

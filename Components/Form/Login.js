@@ -1,5 +1,5 @@
 import { Button, TextInput, Text, HelperText, ActivityIndicator, FAB} from 'react-native-paper'
-import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert } from 'react-native'
+import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView } from 'react-native'
 import { Formik } from 'formik'
 import { loginSchema } from '../../utils/schema'
 import { Login } from '../../api/account/login'
@@ -15,11 +15,13 @@ import Loading from '../miscsCompontent/Loading'
 export default function Login1( { navigation }) {
 
      const [isLoading, setLoading] = useState(false);
+     const [show, setShow]= useState(true);
 
      return (
           <SafeAreaView style={style.container}>
                <Loading loading={isLoading}></Loading>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+               <ScrollView showsVerticalScrollIndicator={false}>
                <View style={{margin: 30, alignItems:'center'}}>
                     <Text variant='titleLarge' style={style.boldText}>Sign In</Text>
                </View>
@@ -40,6 +42,7 @@ export default function Login1( { navigation }) {
                               }
 
                               const token = await SecureStore.setItemAsync('token', userLogin.token)
+                              const userId = await SecureStore.setItemAsync('userId', userLogin.id)
      
                               navigation.replace('Screen')
                               setLoading(false)
@@ -58,7 +61,7 @@ export default function Login1( { navigation }) {
                                         <View>
                                              <TextInput
                                                   autoCapitalize='none'
-                                                  mode='flat'
+                                                  mode='outlined'
                                                   activeUnderlineColor='green'
                                                   activeOutlineColor='green'
                                                   placeholder='Enter your Email'
@@ -66,26 +69,32 @@ export default function Login1( { navigation }) {
                                                   value={values.email}
                                                   error={errors.email && touched.password}
                                                   onBlur={handleBlur('email')}
-                                                  style={style.Input}>
+                                                  style={style.Input}
+                                                  left={<TextInput.Icon icon={"email"}/>}
+                                             >
                                              </TextInput>
                                              <HelperText type='error'>{errors.email}</HelperText>
                                         </View>
                                         <View>
                                              <TextInput
                                                   autoCapitalize='none'
-                                                  mode='flat'
+                                                  mode='outlined'
                                                   activeUnderlineColor='green'
+                                                  activeOutlineColor='green'
                                                   placeholder='Enter Your Password'
-                                                  secureTextEntry={true}
+                                                  secureTextEntry={show}
                                                   onChangeText={handleChange('password')}
                                                   value={values.password}
                                                   error={errors.email && touched.password}
                                                   onBlur={handleBlur('password')}
-                                                  style={style.Input}>
+                                                  style={style.Input}
+                                                  right={<TextInput.Icon onPress={() => (setShow(!show))} icon={show ? "eye-off": "eye"}/>}
+                                                  >
                                              </TextInput>
                                              <HelperText type='error'>{errors.password}</HelperText>
                                         </View>
-                                             <Button   
+                                             <Button
+                                                  loading={isLoading}   
                                                   mode='elevated'
                                                   onPress={handleSubmit}
                                                   icon={'login'}
@@ -122,7 +131,7 @@ export default function Login1( { navigation }) {
                          </TouchableOpacity>
                     </View>
                </View>
-               
+               </ScrollView>
           </KeyboardAvoidingView>
           </SafeAreaView>
      )
@@ -143,7 +152,7 @@ const style = StyleSheet.create({
           fontWeight: 'bold'
      },
      Input: {
-          backgroundColor: 'transparent',
+          backgroundColor: 'white',
           width: 300,
           borderRadius: 100,
           margin: 10

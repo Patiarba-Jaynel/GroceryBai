@@ -1,60 +1,63 @@
-import { View, KeyboardAvoidingView, StyleSheet, ActivityIndicator, Alert, Image, TouchableOpacity, ScrollView} from "react-native";
-
-import { TextInput, Text } from "react-native-paper";
-
+import { View, KeyboardAvoidingView, StyleSheet, ActivityIndicator, Alert, TouchableOpacity, ScrollView} from "react-native";
+import { Image } from 'expo-image';
+import { TextInput, Text, Portal, Modal } from "react-native-paper";
 import * as SecureStore from 'expo-secure-store'
 import {AsyncStorage} from 'react-native';
-
 import URL from "../../api/constants";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import Icon from 'react-native-vector-icons/Ionicons';
-
 import Loading from "../miscsCompontent/Loading";
-
+import ProfileModal from "../Modal/ProfileModal";
+import { Formik } from "formik";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Profile( { navigation }) {
      const [user, setUser] = useState([]);
      const [isLoading, setLoading] = useState(false);
 
 
-     useEffect(() => {
-          async function userMe() {
-               try {
-                    setLoading(true)
-                    console.log( await SecureStore.getItemAsync('token'))
-                    const response = await fetch(`${URL}/api/user/me`, {
-                         headers: {
-                              'Authorization': `Bearer ${ await SecureStore.getItemAsync('token')}`
-                         }
-                    })
-     
-                    if (response.status == 403) {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
-     
-                    const message =  await response.json()
-                    setUser(message)
-     
-                    setLoading(false)
-               } catch (error) {
-                    setLoading(true)
-                    Alert.alert('Error has been occurred', `${error}`)
-                    setLoading(false)
-               }
-
-          }
+     useFocusEffect(
+          useCallback(() => {
+               async function userMe() {
+                    try {
+                         setLoading(true)
+                         //console.log( await SecureStore.getItemAsync('token'))
+                         const response = await fetch(`${URL}/api/user/me`, {
+                              headers: {
+                                   'Authorization': `Bearer ${ await SecureStore.getItemAsync('token')}`
+                              }
+                         })
           
-          async function Check() {
-               if (await SecureStore.getItemAsync('token') == '') {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
-               userMe()
-          }
+                         if (response.status == 403) {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
+          
+                         const message =  await response.json()
+                         setUser(message)
+          
+                         setLoading(false)
+                    } catch (error) {
+                         setLoading(true)
+                         Alert.alert('Error has been occurred', `${error}`)
+                         setLoading(false)
+                    }
+     
+               }
+               
+               async function Check() {
+                    if (await SecureStore.getItemAsync('token') == '') {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
+                    userMe()
+               }
+     
+               Check()
+          }, [])
+        );
 
-          Check()
-     }, [])
+     const [visible, setVisible] = useState(false);
 
      return (
      <SafeAreaView style={style.container}>
           <View>
+               <ScrollView showsVerticalScrollIndicator={false}>
                <View style={{flex: 1, margin: 20, alignItems: 'center'}}>
                     <View style={{marginBottom: 50}}>
                          <Text variant="titleLarge" style={{fontWeight: 'bold'}}>My Profile</Text>
@@ -64,10 +67,10 @@ export default function Profile( { navigation }) {
                          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom:10}}>
                                    <Text variant="titleSmall">Personal Information</Text>
                          </View>
-                         <TouchableOpacity style={{marginBottom: 50}}>
+                         <TouchableOpacity style={{marginBottom: 50}} onPress={() => (setVisible(true))}>
                               <View style={{borderColor: 'black', backgroundColor: 'white', width: 350, height: 200, borderRadius: 20, flexDirection:'row'}}>
                                    <View style={{ backgroundColor:'white', alignItems:'center', height: 100, marginTop: 50, marginLeft: 20, borderRightWidth:1}}>
-                                        <Image source={require('../../assets/google.png')} style={{ height: 100, width: 100, marginRight:10}}></Image>
+                                        <Image transition={1000} source={{uri: user.image}} style={{ height: 100, width: 100, marginRight:10, borderRadius: 50}}></Image>
                                    </View>
 
                                    {
@@ -97,7 +100,9 @@ export default function Profile( { navigation }) {
                               </View>
 
                               <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
-                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={() => {
+                                        navigation.navigate('Custom')
+                                   }}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
                                              Add Custom Product
                                         </Text>
@@ -119,7 +124,7 @@ export default function Profile( { navigation }) {
                               </View>
 
                               <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
-                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={() => {navigation.navigate('FAQ')}}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
                                              FAQ
                                         </Text>
@@ -130,7 +135,7 @@ export default function Profile( { navigation }) {
                               </View>
 
 
-                              <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
+                              <View style={{marginBottom: 50, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
                                    <TouchableOpacity>
                                         <Text style={{marginLeft: 20, color:'red'}} variant='titleMedium' onPress={async () => {
                                              const token = await SecureStore.setItemAsync('token', '')
@@ -139,9 +144,10 @@ export default function Profile( { navigation }) {
                                    </TouchableOpacity>
                               </View>
                          </View>
-
                     </View>
                </View>
+               </ScrollView>
+               <ProfileModal visible={visible} setVisible={setVisible} {...user}/>
           </View>
      </SafeAreaView>
      )
@@ -151,7 +157,7 @@ export default function Profile( { navigation }) {
 
 const style = StyleSheet.create({
      container: {
-          backgroundColor: "#F5F5F8",
+          backgroundColor: "#f5f5f5",
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
@@ -172,5 +178,8 @@ const style = StyleSheet.create({
           alignItems: 'center',
           flex: 2,
           margin: 1
+     },
+     containerStyle: {
+          backgroundColor: 'white', padding: 20, alignSelf: 'center', width: 350, borderRadius: 10
      }
 })

@@ -8,9 +8,11 @@ import { updateList, deleteList } from '../../../api/planner/item'
 
 function ListContainer({navigation, route}) {
 
-
-    const [total, setTotal] = useState()
+    const [isLoading, setLoading] = useState(false)
     const [list, setList] = useState([])
+
+
+    const total = route.params.total
 
     useEffect(() => {
       function set() {
@@ -18,6 +20,7 @@ function ListContainer({navigation, route}) {
       }
       set()
     }, [])
+
 
     const items = route.params.items
     const userId = route.params.userId
@@ -50,7 +53,7 @@ function ListContainer({navigation, route}) {
                               <ScrollView showsVerticalScrollIndicator={false}> 
                                 <View style={{flex: 1}}>
                                   {
-                                    list.reverse().map((item, index) => {
+                                    list.map((item, index) => {
                                       return (
                                         <View key={index}>
                                           <View style={style.container}>
@@ -97,12 +100,12 @@ function ListContainer({navigation, route}) {
               </View>
               <View >
             <View style={{backgroundColor:'white', padding: 10, borderRadius: 10, flexDirection:'row', alignItems:'center'}}>
-              <Text variant='titleMedium' key={route.params._id}>Total: ₱ {route.params.total}</Text>
-              <View style={{flexDirection:'row', alignSelf:'center', padding: 20,}}>
-                <Button icon={'store-plus-outline'} mode='elevated' textColor='black' buttonColor='white' style={{margin: 10}} onPress={() => {
+              <Text variant='titleMedium' key={route.params._id}>Total: ₱ {total.toFixed(2)}</Text>
+              <View style={{flexDirection:'row', alignSelf:'center', padding: 10,}}>
+                <Button icon={'store-plus-outline'} mode='elevated' textColor='black' buttonColor='white' style={{margin: 1}} onPress={() => {
                   navigation.navigate('Home')
                 }}>Add more</Button>
-                <Button icon={'delete-outline'} mode='elevated' textColor='white' buttonColor='#18B127' style={{margin: 10}} onPress={() => (deleteList(data, navigation))}>Delete</Button>
+                <Button loading={isLoading} icon={'delete-outline'} mode='elevated' textColor='white' buttonColor='#18B127' style={{margin: 2}} onPress={() => (deleteList(data, navigation))}>Delete</Button>
               </View>
             </View>
           </View>

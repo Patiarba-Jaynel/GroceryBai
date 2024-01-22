@@ -88,7 +88,7 @@ export default function Product({route, navigation }) {
      return (
           <SafeAreaView style={style.container}>
           <View style={{justifyContent:'center'}}>
-               <CloseButton navigation={navigation}/>
+               {/*<CloseButton navigation={navigation}/>*/}
                <View style={{justifyContent:'center', alignItems:'center', flex: 2}}>
                     <View style={{}}>
                          <View style={{width: 350, height: 420, backgroundColor: 'white', borderRadius: 30}}>

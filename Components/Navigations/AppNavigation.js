@@ -13,6 +13,10 @@ import ListContainer from '../../Components/Container/WeeklyPlanner/ListContaine
 import TabNavigation from "./TabNavigation";
 import ResetScreen from "../Screens/ResetScreen";
 import ResetOTPScreen from "../Screens/ResetOTPScreen";
+import Custom from "../Container/Custom";
+import FAQ from "../../Components/Container/FAQ";
+
+import CustomHome from "../Form/CustomHome";
 
 import * as SecureStore from 'expo-secure-store'
 const Stack = createNativeStackNavigator() 
@@ -35,14 +39,27 @@ export default function AppNavigation() {
                     <Stack.Screen options={{headerShown: false}} name="Register" component={RegisterScreen} />
                     <Stack.Screen options={{headerShown: false}} name="Reset" component={ResetScreen} />
                     <Stack.Screen options={{headerShown: false}} name="OTP" component={ResetOTPScreen} />
-                    <Stack.Screen options={{headerShown: false}} name="Profile" component={Profile} />
+
                </Stack.Group>
+               
 
                <Stack.Group>
                     <Stack.Screen options={{headerShown: false}} name="Screen" component={TabNavigation} />
-                    <Stack.Screen options={{headerShown: false}} name="AddProduct" component={Product} />
+                    <Stack.Screen options={{headerShown: true, headerTitle:''}} name="AddProduct" component={Product} />
                     <Stack.Screen options={{headerShown: true}} name="Planner" component={Planner} />
                     <Stack.Screen options={{headerShown: false}} name="ListContainer" component={ListContainer} />
+               </Stack.Group>
+
+
+               <Stack.Group>
+
+               </Stack.Group>
+
+               <Stack.Group>
+                    <Stack.Screen options={{headerShown: false}} name="Profile" component={Profile} />
+                    <Stack.Screen options={{headerShown: false}} name="Wishlist" component={Profile} />
+                    <Stack.Screen options={{headerShown: false}} name="Custom" component={Custom} />
+                    <Stack.Screen options={{headerShown: true}} name="FAQ" component={FAQ} />
                </Stack.Group>
 
           </Stack.Navigator>

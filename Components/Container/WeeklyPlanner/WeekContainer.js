@@ -16,7 +16,7 @@ export default function WeekContainer(props) {
                          <Text variant='labelMedium' style={{color:'#18B127'}}>{`Grocery for ${props.schedule}`}</Text>
                          <Text variant='labelSmall' style={{color:'gray'}}>{`Added on ${date}`}</Text>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={{flexWrap:'wrap'}}>
                          <Text variant='labelMedium' style={{color:'#18B127'}}><Icon color='gray' source={'cart-outline'} size={20}></Icon>: ₱ {props.total}</Text>
                     </View>
                </View>

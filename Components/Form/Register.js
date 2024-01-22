@@ -19,13 +19,13 @@ export default function Login1( { navigation }) {
 
      return (
           
-          <SafeAreaView style={style.container} >
+          <SafeAreaView style={{flex: 1 }}>
                <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}}>
                     <Loading loading={isLoading}></Loading>
                </View>
                <CloseButton navigation={navigation}/>
-                    <ScrollView>
                          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                         <ScrollView>
                               <View style={{margin: 30, alignItems:'center'}}>
                                    <Text variant='titleLarge' style={style.boldText}>Sign Up</Text>
                               </View>
@@ -53,7 +53,7 @@ export default function Login1( { navigation }) {
                                                   <View style={{alignItems: 'center'}}>
                                                        <View>
                                                             <TextInput
-                                                                 mode='flat'
+                                                                 mode='outlined'
                                                                  activeUnderlineColor='green'
                                                                  activeOutlineColor='green'
                                                                  placeholder='Enter your first name'
@@ -67,7 +67,7 @@ export default function Login1( { navigation }) {
                                                        </View>
                                                        <View>
                                                             <TextInput
-                                                                 mode='flat'
+                                                                 mode='outlined'
                                                                  activeUnderlineColor='green'
                                                                  activeOutlineColor='green'
                                                                  placeholder='Enter your last name'
@@ -82,7 +82,7 @@ export default function Login1( { navigation }) {
                                                        <View>
                                                             <TextInput
                                                                  autoCapitalize='none'
-                                                                 mode='flat'
+                                                                 mode='outlined'
                                                                  activeUnderlineColor='green'
                                                                  activeOutlineColor='green'
                                                                  placeholder='Enter your Email'
@@ -97,7 +97,7 @@ export default function Login1( { navigation }) {
                                                        <View>
                                                             <TextInput
                                                                  autoCapitalize='none'
-                                                                 mode='flat'
+                                                                 mode='outlined'
                                                                  activeUnderlineColor='green'
                                                                  placeholder='Enter Your Password'
                                                                  secureTextEntry={true}
@@ -133,10 +133,8 @@ export default function Login1( { navigation }) {
                                         </TouchableOpacity>
                                    </View>
                               </View>
-
+                         </ScrollView>
                     </KeyboardAvoidingView>
-               </ScrollView>
-
           </SafeAreaView>
      )
 }
@@ -162,7 +160,6 @@ const style = StyleSheet.create({
      inputContainer: {
           textAlign: 'center',
           alignItems: 'center',
-          flex: 2,
           margin: 1
      },
      loading: {
