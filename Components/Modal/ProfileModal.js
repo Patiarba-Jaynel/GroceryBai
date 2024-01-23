@@ -13,8 +13,7 @@ export default function ProfileModal(props) {
 
      const { email, first_name, last_name, _id }  = props
 
-
-     const [image, setImage] = useState(props.image);
+     const [image, setImage] = useState(null);
      const [uploading, setUploading] = useState(false);
 
      const pickImage = async () => {
@@ -52,10 +51,11 @@ export default function ProfileModal(props) {
      
                const filename = image.substring(image.lastIndexOf('/') + 1)
                const ref = firebase.storage().ref().child(filename)
+
      
                const up = await ref.put(blob)
                const fileName = up._delegate.metadata.fullPath
-               
+
                const data = JSON.stringify({
                     id: _id,
                     first_name: first_name,
@@ -63,7 +63,6 @@ export default function ProfileModal(props) {
                     image: `https://firebasestorage.googleapis.com/v0/b/grocerybai.appspot.com/o/${fileName}?alt=media`
                })
 
-               console.log(data)
 
                await updateAccount(data)
 
@@ -74,7 +73,6 @@ export default function ProfileModal(props) {
                props.setVisible(false)
           }
           catch (error){
-               console.log(error)
                Alert.alert(error)
                setUploading(false)
                props.setVisible(false)
@@ -87,8 +85,21 @@ export default function ProfileModal(props) {
                <Text variant="titleLarge" style={{marginBottom: 10, fontWeight: 'bold'}}>Edit Information</Text>
                <Formik
                onSubmit={async (values)=> {
-                    console.log(values)
-                    await uploadMedia(values.first_name, values.last_name)
+                    if (image != null) {
+                         await uploadMedia(values.first_name, values.last_name)
+                    }
+                    else {
+                         props.setVisible(false)
+
+                         const data = JSON.stringify({
+                              id: _id,
+                              first_name: values.first_name,
+                              last_name: values.last_name,
+                              image: props.image
+                         })
+
+                         await updateAccount(data)
+                    }
                }}
                initialValues={{first_name: first_name, last_name: last_name}}>
                     {

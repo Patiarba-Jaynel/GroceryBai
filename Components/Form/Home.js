@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useScrollToTop } from '@react-navigation/native'
 import {IconButton} from 'react-native-paper'
 
+
 const category_list = ["Fresh Meat & Seafoods", "Fresh Produce", "Frozen Goods", "Ready To Heat & Eat Items", "Chilled & Dairy Items", "International Goods","Bakery", "Pantry", "Snacks", "Beverage", "Health & Beauty", "Babies & Kids", "Home Care", "DIY/Hardware", "Pet Care", "Health & Hygiene Essentials"]
 
 
@@ -101,12 +102,14 @@ export default function Home( { navigation } ) {
                          {
                               product.map((items, index) => {
 
-                                   return <Container name={items.product.title} price={items.product.price} image={items.product.image_url} category={items.product.category} key={index} onPress={
+                                   return (
+                                   <Container name={items.product.title} price={items.product.price} image={items.product.image_url} category={items.product.category} key={index} onPress={
                                         () => {
                                              //navigation.navigate('AddProduct', {name: items.product.title, price: items.product.price, image: items.product.image_url, category: items.category})
                                              navigation.navigate('AddProduct', {...items})
                                         }
                                    } />
+                                   )
                               })
                          }
 
@@ -127,11 +130,12 @@ export default function Home( { navigation } ) {
                                    <TouchableOpacity>
                                    <IconButton
                                         iconColor='#18B127'
-                                        selected={select}
                                         icon="heart-outline"
                                         color={"#EFEEEE"}
                                         size={30}
-                                        onPress={() => setSelect(true)}/>
+                                        onPress={() => {
+                                             navigation.navigate('Favorite');
+                                        }}/>
                                    </TouchableOpacity>
                          </View>
                     </View>

@@ -9,7 +9,7 @@ import URL from '../../api/constants'
 
 
 import Loading from '../miscsCompontent/Loading'
-import { products, chooseCategory, searchProduct }  from '../../api/product/custom.js'
+import { products, chooseCategory, searchProduct }  from '../../api/product/favorite.js'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useScrollToTop } from '@react-navigation/native'
@@ -19,7 +19,7 @@ import { useFocusEffect } from '@react-navigation/native';
 const category_list = ["Fresh Meat & Seafoods", "Fresh Produce", "Frozen Goods", "Ready To Heat & Eat Items", "Chilled & Dairy Items", "International Goods","Bakery", "Pantry", "Snacks", "Beverage", "Health & Beauty", "Babies & Kids", "Home Care", "DIY/Hardware", "Pet Care", "Health & Hygiene Essentials"]
 
 
-export default function CustomHome( { navigation } ) {
+export default function Favorite( { navigation } ) {
      const ref = useRef(null)
      const [select, setSelect] = useState(false)
 
@@ -64,6 +64,7 @@ export default function CustomHome( { navigation } ) {
 
           searchProduct(name, setProduct, setLoading)
      }
+
 
      /** 
      if (isLoading) {
@@ -133,18 +134,6 @@ export default function CustomHome( { navigation } ) {
                          <View style={{alignItems:'center'}}>
                               <Searchbar iconColor='#000000' onSubmitEditing={() => (searchItem(search))} placeholder='Search Item' onChangeText={(value) => {setSearch(value)}} value={search} style={{width: 300, backgroundColor:'#EFEEEE'}}  />
                          </View>
-                         <View>
-                              <TouchableOpacity>
-                                   <IconButton
-                                        iconColor='#18B127'
-                                        icon="heart-outline"
-                                        color={"#EFEEEE"}
-                                        size={30}
-                                        onPress={() => {
-                                             navigation.navigate('Favorite');
-                                        }}/>
-                              </TouchableOpacity>
-                         </View>
                     </View>
 
                     <View style={{flexDirection: "row", height: 40}}>
@@ -167,6 +156,7 @@ export default function CustomHome( { navigation } ) {
 
 const style = StyleSheet.create({
      container: {
+          marginTop: 40,
           backgroundColor: "#F5F5F8",
           flex: 1,
           justifyContent: "center",

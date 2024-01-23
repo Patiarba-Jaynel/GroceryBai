@@ -1,6 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
+import { View } from "react-native";
+import { Text } from "react-native-paper";
 
 
 import HomeScreen from "../Screens/HomeScreen";
@@ -22,7 +24,7 @@ export default function TabNavigation() {
           <Context.Provider value={plans}>
                <Tab.Navigator
                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
+                    tabBarIcon: ({ focused, color }) => {
                       let iconName;
           
                       if (route.name === 'Home') {
@@ -34,49 +36,76 @@ export default function TabNavigation() {
                       }
           
                       // You can return any component that you like here!
-                      return <Ionicons name={iconName} size={size} color={color} />;
+                      return <Ionicons name={iconName} color={color} />;
                     },
-                    tabBarActiveTintColor: 'green',
+                    tabBarActiveTintColor: '#18B127',
                     tabBarInactiveTintColor: 'gray',
                     tabBarStyle: {
-                         backgroundColor: '#f5f5f5',
+                         backgroundColor: '#D9EDBF',
                          position: 'absolute',
-                         borderTopWidth: 0,
+                         bottom: 30,
+                         left: 20,
+                         right: 20,
                          elevation: 0,
+                         borderRadius: 15,
+                         justifyContent:'center',
                     }
                   })}
                   sceneContainerStyle={{
                     backgroundColor:'transparent'
-                  }}>
+                  }}
+
+                  >
                     <Tab.Screen name="Home" component={HomeScreen} options={{
                          headerShown: false,
-                         tabBarLabel: 'Home',
-                         tabBarIcon: ({ color, size}) => (
-                              <Ionicons name="home" color={color} size={size}/>
+                         tabBarShowLabel:false,
+                         tabBarIcon: ({ color, size, focused}) => (
+                              <View style={{top: 10, alignItems:'center', justifyContent:'center'}}>
+                                   <Ionicons name={focused ? "home" : "home-outline"} color={color} size={focused ? 30: 25}/>
+                                   <Text variant="labelSmall" style={focused ? {color:"grey"} : {color: "grey", fontSize: 10}}>Home</Text>
+                              </View>
                          )
-                         }}></Tab.Screen>
+                         }}
+                         >
+                         
+                    </Tab.Screen>
                     <Tab.Screen name="CustomHome" component={CustomHome} options={{
                          headerShown: false,
-                         tabBarLabel: 'Community Products',
-                         tabBarIcon: ({ color, size}) => (
-                              <Ionicons name="people-circle-outline" color={color} size={size}/>
+                         tabBarShowLabel:false,
+                         tabBarLabel: 'Community',     
+                         tabBarIcon: ({ color, size, focused}) => (
+                              <View style={{top: 10, alignItems:'center', justifyContent:'center'}}>
+                                   <Ionicons name={focused ? "people-circle": "people-circle-outline"} color={color} size={focused ? 30: 25}/>
+                                   <Text variant="labelSmall" style={focused ? {color:"grey"} : {color: "grey", fontSize: 10}}>Community</Text>
+                              </View>
                          )
                          }}></Tab.Screen>
                                         <Tab.Screen name="Planner" component={ListScreen} options={{
                          headerShown: false,
                          tabBarBadge: plans,
+                         tabBarShowLabel:false,
                          tabBarLabel: 'Planner',
-                         tabBarIcon: ({ color, size}) => (
-                              <Ionicons name="bookmark-outline" color={color} size={size}/>
+                         tabBarIcon: ({ color, size, focused}) => (
+                              <View style={{top: 10, alignItems:'center', justifyContent:'center'}}>
+                                   <Ionicons name={focused ? "bookmark" : "bookmark-outline"} color={color} size={focused ? 30: 25}/>
+                                   <Text variant="labelSmall" style={focused ? {color:"grey"} : {color: "grey", fontSize: 10}}>Planner</Text>
+                              </View>
                          )
-                         }}></Tab.Screen>
+                         }}>
+                    
+                    </Tab.Screen>
                     <Tab.Screen name="Profile" component={Profile} options={{
                          headerShown: false,
+                         tabBarShowLabel:false,
                          tabBarLabel: 'Profile',
-                         tabBarIcon: ({ color, size}) => (
-                              <Ionicons name="person-outline" color={color} size={size}/>
+                         tabBarIcon: ({ color, size, focused}) => (
+                              <View style={{top: 10, alignItems:'center', justifyContent:'center'}}>
+                              <Ionicons name={focused ? "person" : "person-outline"} color={color} size={focused ? 30: 25}/>
+                              <Text variant="labelSmall" style={focused ? {color:"grey"} : {color: "grey", fontSize: 10}}>Profile</Text>
+                              </View>
                          )
-                         }}></Tab.Screen>
+                         }}>
+                    </Tab.Screen>
                </Tab.Navigator>
           </Context.Provider>
      )

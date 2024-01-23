@@ -7,10 +7,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { chooseCategory1 }  from '../../api/product/products'
 import ProductContainer from '../Container/ProductContainer'
 import Loading from '../miscsCompontent/Loading';
-import { Portal, Modal, TextInput, } from "react-native-paper"
+import { Portal, Modal, TextInput, IconButton } from "react-native-paper"
 import DropDown from "react-native-paper-dropdown";
+import * as SecureStore from 'expo-secure-store';
 
 import { ListItem, updateList, ListItem1 } from '../../api/planner/item'
+
+import {createProduct} from '../../api/product/favorite'
 
 
 import ProductContainerModal from '../Modal/ProductContainerModal';
@@ -85,6 +88,13 @@ export default function Product({route, navigation }) {
      const [showDropDown, setShowDropDown] = useState(false);
      const [selectedList, setSelectedList] = useState()
 
+     const [choose, setChoose] = useState(false);
+
+
+
+     //add it to favorite
+     
+
      return (
           <SafeAreaView style={style.container}>
           <View style={{justifyContent:'center'}}>
@@ -97,7 +107,48 @@ export default function Product({route, navigation }) {
                               <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginBottom: 20, marginTop: 20, margin: 5}}>
                                    <Text variant='labelLarge' style={{fontWeight:'bold', textAlign: 'auto', fontSize: 15, marginLeft: 10,}}>{title}</Text>
                                    <Text variant='labelMedium' style={{fontWeight:'bold', textAlign:'left', marginTop: 10, marginLeft: 10, fontSize: 15, color: '#18B127'}}>{category}</Text>
-                                   <Text variant='labelMedium' style={{fontWeight:'bold', textAlign:'left', marginTop: 10, marginLeft: 10, fontSize: 15, color: '#18B127'}}>₱{price}</Text>
+                                   <View style={{flexDirection: 'row', justifyContent:'space-evenly'}}>
+                                        <Text variant='labelMedium' style={{fontWeight:'bold', textAlign:'left', marginTop: 10, marginLeft: 10, fontSize: 15, color: '#18B127'}}>₱{price}</Text>
+                                        <IconButton
+                                        iconColor='#18B127'
+                                        icon={choose ? "heart" : "heart-outline"}
+                                        style={{left: 200, bottom: 30}}
+                                        color={"#EFEEEE"}
+                                        size={30}
+                                        onPress={async () => {
+                                             console.log("clicked")
+                                             try {
+                                                  const userId = await SecureStore.getItemAsync('userId')
+
+                                                  data = JSON.stringify({
+                                                       "category": category,
+                                                       "userId": userId,
+                                                       "product": {
+                                                            "title": title,
+                                                            "price": Number(price),
+                                                            "image_url": image_url
+                                                       }
+                                                  })
+
+     
+                                                  const add = await createProduct(data)
+     
+                                                  !choose ? setChoose(true) : setChoose(false)
+                                                  
+                                                  if (add) {
+                                                       Alert.alert("Successfully added", 'Successfully added to the favorite')
+                                                  }
+                                                  else {
+                                                       Alert.alert("Unknown error Occurred", 'Unknown error Occurred')
+                                                  }
+
+                                             } catch (error) {
+                                                  Alert.alert("Unknown error Occurred", error)
+                                             }
+
+                                        }}/>
+                                   </View>
+
                               </View>
                          </View>
                     </View>
@@ -115,7 +166,7 @@ export default function Product({route, navigation }) {
                                    setQuantity(quantity + 1)
                               }}></Button>
                          </View>
-                         <Button textColor='white' mode='elevated' buttonColor='#18B127' style={{height: 50, width: 150, justifyContent:'center'}} onPress={()=>{
+                         <Button textColor='white' icon={"cart-plus"} mode='contained' buttonColor='#18B127' style={{justifyContent:'center'}} onPress={()=>{
                               showModal()
                               LoadItem()
                          }}>Add
@@ -211,6 +262,7 @@ export default function Product({route, navigation }) {
 
 const style = StyleSheet.create({
      container: {
+          marginTop: 40,
           backgroundColor: "#F5F5F8",
           flex: 1,
           justifyContent: "center",
