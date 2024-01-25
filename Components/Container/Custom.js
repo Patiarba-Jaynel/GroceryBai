@@ -1,4 +1,4 @@
-import { View, SafeAreaView, KeyboardAvoidingView, Text, Image, TouchableOpacity, StyleSheet, Alert, ScrollView } from "react-native";
+import { View, SafeAreaView, KeyboardAvoidingView, Text, Image, TouchableOpacity, StyleSheet, Alert, ScrollView, Platform } from "react-native";
 import { useState } from "react";
 import { Button, TextInput, HelperText } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
@@ -155,9 +155,8 @@ export default function Custom({ navigation }) {
      ];
 
      return (
-     <SafeAreaView style={{flex: 1}}>
+     <SafeAreaView style={{flex: 1, marginTop: Platform.OS == "android" ? 100 : 20}}>
           <ScrollView showsVerticalScrollIndicator={false}>
-               <CloseButton navigation={navigation}/>
                <KeyboardAvoidingView>
                <View>
                     <View style={{ alignItems: "center" }}>

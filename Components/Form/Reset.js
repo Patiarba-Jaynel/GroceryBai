@@ -68,7 +68,8 @@ export default function Reset( { navigation }) {
                                                   </TextInput>
                                                   <HelperText type='error'>{errors.email}</HelperText>
                                              </View>
-                                                  <Button   
+                                                  <Button
+                                                       loading={isLoading}
                                                        mode='elevated'
                                                        onPress={handleSubmit}
                                                        icon={'send-outline'}

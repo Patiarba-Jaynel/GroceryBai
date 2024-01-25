@@ -9,7 +9,7 @@ export default function WeekContainer(props) {
 
      return (
      <View style={{marginBottom: 10}}>
-          <TouchableOpacity onPress={props.onPress}>
+          <TouchableOpacity onPress={props.onPress} onLongPress={props.onLongPress}>
                <View style={style.weekContainer}>
                     <View style={{margin: 20}}>
                          <Text variant='labelLarge'>{props.week}</Text>

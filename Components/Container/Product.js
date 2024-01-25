@@ -20,6 +20,7 @@ import ProductContainerModal from '../Modal/ProductContainerModal';
 
 import CloseButton from '../miscsCompontent/CloseButton';
 
+
 export default function Product({route, navigation }) {
      const [list, setList] = useState([])
      const [item, setItem] = useState([])
@@ -34,7 +35,7 @@ export default function Product({route, navigation }) {
 
      const { name, image, category } = route.params
 
-     const {image_url, title, price} = route.params.product
+     const {image_url, title, price, _id} = route.params.product
 
 
      async function selectCategory(name) {
@@ -119,8 +120,9 @@ export default function Product({route, navigation }) {
                                              console.log("clicked")
                                              try {
                                                   const userId = await SecureStore.getItemAsync('userId')
-
+                                                  console.log(_id)
                                                   data = JSON.stringify({
+                                                       "_id": _id,
                                                        "category": category,
                                                        "userId": userId,
                                                        "product": {
@@ -196,7 +198,7 @@ export default function Product({route, navigation }) {
                          />
                          }
                          <View style={{margin: 10}}>
-                              <Button loading={addLoading} mode='contained-tonal' textColor='white' buttonColor='#18B127' onPress={async () => {
+                              <Button loading={addLoading} icon={"bookmark-plus-outline"} mode='contained-tonal' textColor='white' buttonColor='#18B127' onPress={async () => {
                                    try {
                                         setAddLoading(true)
                                         const id = selectedList

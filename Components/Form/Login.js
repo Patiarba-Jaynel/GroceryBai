@@ -6,8 +6,9 @@ import { Login } from '../../api/account/login'
 
 import * as SecureStore from 'expo-secure-store';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../../utils/authContext'
 
 import Loading from '../miscsCompontent/Loading'
 
@@ -15,11 +16,13 @@ import Loading from '../miscsCompontent/Loading'
 export default function Login1( { navigation }) {
 
      const [isLoading, setLoading] = useState(false);
+     const [isloggedIn, setloggedIn] = useContext(AuthContext)
      const [show, setShow]= useState(true);
+
+     
 
      return (
           <SafeAreaView style={style.container}>
-               <Loading loading={isLoading}></Loading>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                <ScrollView showsVerticalScrollIndicator={false}>
                <View style={{margin: 30, alignItems:'center'}}>
@@ -43,8 +46,9 @@ export default function Login1( { navigation }) {
 
                               const token = await SecureStore.setItemAsync('token', userLogin.token)
                               const userId = await SecureStore.setItemAsync('userId', userLogin.id)
-     
-                              navigation.replace('Screen')
+
+                              setloggedIn(true)
+
                               setLoading(false)
                          } catch (error) {
                               setLoading(true)

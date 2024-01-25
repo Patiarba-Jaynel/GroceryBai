@@ -1,10 +1,10 @@
 
-import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, SafeAreaView, Platform } from 'react-native'
+import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, SafeAreaView } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native';
 import { Text,Icon, Button, List, Modal, Portal, Divider, TextInput } from 'react-native-paper';
 import DropDown from "react-native-paper-dropdown";
 
-import WeekContainer from './WeekContainer'
+import WeekContainer from '../WeeklyPlanner/WeekContainer'
 import { useEffect, useState, useCallback, createContext, useContext } from 'react'
 import { ListItem, createList } from '../../../api/planner/item'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,14 +13,12 @@ import URL from '../../../api/constants'
 import Loading from '../../miscsCompontent/Loading'
 import CloseButton from '../../miscsCompontent/CloseButton'
 import { useIsFocused } from '@react-navigation/native';
-import Empty from './Empty'
+import Empty from '../WeeklyPlanner/Empty'
 
-import PlannerModal from '../../Modal/PlannerModal';
 
 import { Context } from '../../../utils/context';
 
-export default function Planner({ navigation, route }) {
-     const [plans, setPlans] = useContext(Context)
+export default function History({ navigation, route }) {
      const [list1, setList1] = useState([])
      const [totalPrice, setPrice] = useState([])
      const [error, setError] = useState()
@@ -28,47 +26,11 @@ export default function Planner({ navigation, route }) {
      const [isEmpty, setIsEmpty] = useState(false)
      
 
-     //for dropdown
-     const [listName, setListName] = useState()
-     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
-     const [showDropDown, setShowDropDown] = useState(false);
-     const [schedule, setSchedule] = useState()
-     const Schedules = [
-          {
-               label: 'Monday',
-               value: 'Monday'
-          },
-          {
-               label: 'Tuesday',
-               value: 'Tuesday'
-          },
-          {
-               label: 'Wednesday',
-               value: 'Wednesday'
-          },
-          {
-               label: 'Thursday',
-               value: 'Thursday'
-          },
-          {
-               label: 'Friday',
-               value: 'Friday'
-          },
-          {
-               label: 'Saturday',
-               value: 'Saturday'
-          },
-          {
-               label: 'Sunday',
-               value: 'Sunday'
-          },
-     ]
-
      async function userMe() {
           try {
                setLoading(true)
                //console.log( await SecureStore.getItemAsync('token'))
-               const response = await fetch(`${URL}/api/user/items`, {
+               const response = await fetch(`${URL}/api/user/deleted_items`, {
                     headers: {
                          'Authorization': `Bearer ${ await SecureStore.getItemAsync('token')}`
                     }
@@ -79,8 +41,6 @@ export default function Planner({ navigation, route }) {
                const message =  await response.json()
                setList1(message.item)
                setLoading(false)
-
-               setPlans(message.item.length)
           } catch (error) {
                setLoading(true)
                Alert.alert('Error has been occurred', `${error}`)
@@ -97,17 +57,6 @@ export default function Planner({ navigation, route }) {
 
         );
 
-     /*
-     const empty = () => {
-          if (list1.length == 0) {
-               setIsEmpty(true)
-          }
-          else {
-               setIsEmpty(false)
-
-          }
-     }
-     */
 
 
      const isFocused = useIsFocused();
@@ -134,7 +83,7 @@ export default function Planner({ navigation, route }) {
                <View>
                     <View style={{flex: 5}}>
                          <View style={{alignItems:'center', justifyContent: 'center', marginBottom: 50, marginTop: Platform.OS == "android" ? 100: 20}}>
-                              <Text variant='titleLarge' style={{fontWeight: 'bold'}}>Grocery Weekly Planner</Text>
+                              <Text variant='titleLarge' style={{fontWeight: 'bold'}}>Your History Planner</Text>
                          </View>
                               <ScrollView showsVerticalScrollIndicator={false}>
                                    <View>
@@ -144,7 +93,7 @@ export default function Planner({ navigation, route }) {
                                                   :
                                                   list1.map((item, index) => { 
                                                        return (
-                                                       <WeekContainer schedule={item.schedule} date={item.dateCreated} week={item.name} total={item.total} key={index} onPress={() => {navigation.navigate('ListContainer', {...item, total: item.total, name: item.name})}} onLongPress={() => Alert.alert('Share your list with your friends')}/>
+                                                       <WeekContainer schedule={item.schedule} date={item.dateCreated} week={item.name} total={item.total} key={index} onPress={() => {navigation.navigate('HistoryContainer', {...item, total: item.total})}}/>
                                                        )
                                                   })
                                              }         
@@ -153,9 +102,6 @@ export default function Planner({ navigation, route }) {
                               </ScrollView>
                     <Divider style={{marginBottom: 20}}/>
                     </View>
-                    
-                    {/**  Modal */}
-                    <PlannerModal userMe={userMe}/>
                </View>
           </SafeAreaView>
      )

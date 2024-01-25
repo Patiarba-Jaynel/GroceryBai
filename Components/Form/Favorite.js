@@ -121,8 +121,8 @@ export default function Favorite( { navigation } ) {
 
      function renderEmpty() {
           return (
-               <Empty title="No community Products are available" buttonTitle="Contribute now!" onPress={() => {
-                    navigation.navigate('Custom')
+               <Empty title="No favorite products are available" buttonTitle="Add now!" onPress={() => {
+                    navigation.goBack()
                }} />
           )
      }

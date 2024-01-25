@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { Text } from "react-native-paper";
 
 
@@ -19,9 +19,11 @@ const Tab = createBottomTabNavigator()
 
 export default function TabNavigation() {
 
-     const [plans, setPlans] = useState(null)
+     const [plans, setPlans] = useState()
+
+     
      return (
-          <Context.Provider value={plans}>
+          <Context.Provider value={[plans, setPlans]}>
                <Tab.Navigator
                screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color }) => {
@@ -49,6 +51,7 @@ export default function TabNavigation() {
                          elevation: 0,
                          borderRadius: 15,
                          justifyContent:'center',
+                         paddingBottom: Platform.OS == 'android' ? 25 : 30
                     }
                   })}
                   sceneContainerStyle={{

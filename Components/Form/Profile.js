@@ -4,13 +4,14 @@ import { TextInput, Text, Portal, Modal } from "react-native-paper";
 import * as SecureStore from 'expo-secure-store'
 import {AsyncStorage} from 'react-native';
 import URL from "../../api/constants";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/Ionicons';
 import Loading from "../miscsCompontent/Loading";
 import ProfileModal from "../Modal/ProfileModal";
 import { Formik } from "formik";
 import { useFocusEffect } from '@react-navigation/native';
+import { AuthContext } from "../../utils/authContext";
 
 export default function Profile( { navigation }) {
      const [user, setUser] = useState([]);
@@ -29,7 +30,7 @@ export default function Profile( { navigation }) {
                               }
                          })
           
-                         if (response.status == 403) {navigation.replace('Login'); return Alert.alert("Token has been expired", "Please Login Again")}
+                         if (response.status == 403) {setloggedIn(false); return Alert.alert("Token has been expired", "Please Login Again")}
           
                          const message =  await response.json()
                          setUser(message)
@@ -53,6 +54,8 @@ export default function Profile( { navigation }) {
         );
 
      const [visible, setVisible] = useState(false);
+
+     const [isloggedIn, setloggedIn] = useContext(AuthContext)
 
      return (
      <SafeAreaView style={style.container}>
@@ -89,9 +92,9 @@ export default function Profile( { navigation }) {
                     
                          <View>
                               <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
-                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={() =>{navigation.navigate('History')}}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
-                                             Wishlist
+                                             History
                                         </Text>
                                         <Text style={{marginRight: 20}}>
                                              <Icon name="chevron-forward-outline" size={20} color="black" />
@@ -113,7 +116,7 @@ export default function Profile( { navigation }) {
                               </View>
 
                               <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
-                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={() => {navigation.navigate('Reset')}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={() => {navigation.navigate('Reset1')}}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
                                              Password Reset
                                         </Text>
@@ -135,11 +138,11 @@ export default function Profile( { navigation }) {
                               </View>
 
 
-                              <View style={{marginBottom: 50, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
+                              <View style={{marginBottom: 100, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
                                    <TouchableOpacity>
                                         <Text style={{marginLeft: 20, color:'red'}} variant='titleMedium' onPress={async () => {
                                              const token = await SecureStore.setItemAsync('token', '')
-                                             navigation.navigate('Login')
+                                             setloggedIn(false)
                                         }}>Logout</Text>
                                    </TouchableOpacity>
                               </View>

@@ -9,7 +9,7 @@ export default function PlannerModal(props) {
      const showModal = () => setVisible(true);
      const hideModal = () => setVisible(false);
      const containerStyle = {backgroundColor: 'white', padding: 20, alignSelf: 'center', width: 350, borderRadius: 10};
-
+     
      const [listName, setListName] = useState()
      const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
      const [showDropDown, setShowDropDown] = useState(false);
