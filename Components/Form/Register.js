@@ -1,5 +1,5 @@
 import { Button, TextInput, Text, HelperText, ActivityIndicator, IconButton} from 'react-native-paper'
-import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView } from 'react-native'
+import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, Platform } from 'react-native'
 import { Formik } from 'formik'
 import { registerSchema } from '../../utils/schema'
 import { CreateAccount } from '../../api/account/register'

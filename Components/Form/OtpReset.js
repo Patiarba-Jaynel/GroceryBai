@@ -1,5 +1,5 @@
 import { Button, TextInput, Text, HelperText, ActivityIndicator, Icon, IconButton} from 'react-native-paper'
-import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView } from 'react-native'
+import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, Platform } from 'react-native'
 import { Formik } from 'formik'
 import { PasswordResetSchema } from '../../utils/schema'
 import { ResetPassword, SendOTP } from '../../api/account/reset'
@@ -67,6 +67,7 @@ export default function OTPReset( { route,  navigation }) {
                                    <View style={{alignItems: 'center'}}>
                                         <View>
                                              <TextInput
+                                                  keyboardType='numeric'
                                                   mode='flat'
                                                   activeUnderlineColor='green'
                                                   activeOutlineColor='green'
@@ -80,7 +81,8 @@ export default function OTPReset( { route,  navigation }) {
                                              <HelperText type='error'>{errors.otp}</HelperText>   
                                              <TextInput
                                                   secureTextEntry={true}
-                                                  mode='flat'
+                                                  autoCapitalize='none'
+                                                  mode='outlined'
                                                   activeUnderlineColor='green'
                                                   activeOutlineColor='green'
                                                   placeholder='Password'

@@ -1,4 +1,4 @@
-import {View, KeyboardAvoidingView, TouchableOpacity, StyleSheet, ScrollView, Image, Alert, TextInput, RefreshControl} from 'react-native'
+import {View, KeyboardAvoidingView, TouchableOpacity, StyleSheet, ScrollView, Image, Alert, TextInput, RefreshControl, Platform} from 'react-native'
 import {Button, Text, Searchbar, Chip, ActivityIndicator} from 'react-native-paper'
 
 import React, { useRef } from 'react'

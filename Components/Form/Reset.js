@@ -1,5 +1,5 @@
 import { Button, TextInput, Text, HelperText, ActivityIndicator, Icon, IconButton} from 'react-native-paper'
-import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView } from 'react-native'
+import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, Platform } from 'react-native'
 import { Formik } from 'formik'
 import { forgotSchema } from '../../utils/schema'
 import { SendOTP } from '../../api/account/reset'
@@ -20,14 +20,13 @@ export default function Reset( { navigation }) {
           <SafeAreaView style={style.container}>
                <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View>
                     <CloseButton navigation={navigation}/>
                     <View style={{margin: 30, alignItems:'center'}}>
                          <Text variant='titleLarge' style={style.boldText}>Reset Your Password</Text>
                     </View>
 
                     <View style={{alignItems:'center'}}>
-                         <Image source={require('../../assets/grocerylist.png')} style={{height: 250, width: 250}}></Image>
+                         <Image source={require('../../assets/gorcerybai.png')} style={{height: 250, width: 250}}></Image>
                     </View>
                     <View style={style.inputContainer}>
                          <Formik
@@ -56,7 +55,7 @@ export default function Reset( { navigation }) {
                                              <View>
                                                   <TextInput
                                                        autoCapitalize='none'
-                                                       mode='flat'
+                                                       mode='outlined'
                                                        activeUnderlineColor='green'
                                                        activeOutlineColor='green'
                                                        placeholder='Enter your Email'

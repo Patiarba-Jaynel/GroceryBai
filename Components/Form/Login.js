@@ -1,5 +1,5 @@
 import { Button, TextInput, Text, HelperText, ActivityIndicator, FAB} from 'react-native-paper'
-import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView } from 'react-native'
+import { View, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image, Alert, ScrollView, Platform } from 'react-native'
 import { Formik } from 'formik'
 import { loginSchema } from '../../utils/schema'
 import { Login } from '../../api/account/login'
@@ -30,7 +30,7 @@ export default function Login1( { navigation }) {
                </View>
 
                <View style={{alignItems:'center'}}>
-                    <Image source={require('../../assets/grocerylist.png')} style={{height: 250, width: 250}}></Image>
+                    <Image source={require('../../assets/gorcerybai.png')} style={{height: 300, width: 300}}></Image>
                </View>
                <View style={style.inputContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                     <Formik
@@ -64,6 +64,7 @@ export default function Login1( { navigation }) {
                                    <View style={{alignItems: 'center'}}>
                                         <View>
                                              <TextInput
+                                                  keyboardType='email-address'
                                                   autoCapitalize='none'
                                                   mode='outlined'
                                                   activeUnderlineColor='green'

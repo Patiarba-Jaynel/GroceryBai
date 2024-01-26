@@ -116,7 +116,10 @@ export default function Profile( { navigation }) {
                               </View>
 
                               <View style={{marginBottom: 20, backgroundColor: 'white', height: 60, width: 315, borderRadius: 20, justifyContent:'center'}}>
-                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={() => {navigation.navigate('Reset1')}}>
+                                   <TouchableOpacity style={{justifyContent:'space-between', flexDirection:'row'}} onPress={async () => {
+                                             const token = await SecureStore.setItemAsync('token', '')
+                                             setloggedIn(false)
+                                   }}>
                                         <Text style={{marginLeft: 20}}variant='titleMedium'>
                                              Password Reset
                                         </Text>
