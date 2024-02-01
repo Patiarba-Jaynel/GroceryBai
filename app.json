@@ -5,19 +5,19 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "The app accesses your photos to let you upload"
         }
       ],
       "expo-secure-store"
     ],
-    "name": "App",
+    "name": "Grocery Bai - a grocery list",
     "slug": "app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/gorcerybai.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/gorcerybai.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -26,20 +26,20 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.cucumbersalad.app"
+      "bundleIdentifier": "com.grocerybai.app"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/gorcerybai.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.cucumbersalad.app"
+      "package": "com.grocery.app"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/gorcerybai.png"
     },
     "extra": {
       "eas": {

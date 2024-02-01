@@ -19,7 +19,7 @@ export default function Empty(props) {
 
                     <View style={{marginTop: 250, alignItems: 'center'}}>
                          <Button mode='contained-tonal' buttonColor='#18B127' textColor='white'
-                         onPress={props.onPress} style={{width: 314, height:70, justifyContent: 'center'}}>{buttonTitle}</Button>
+                         onPress={props.onPress} style={{width: 200, height:50, justifyContent: 'center'}}>{buttonTitle}</Button>
                     </View>
                </View>
           </KeyboardAvoidingView>
@@ -28,6 +28,7 @@ export default function Empty(props) {
 
 const style = StyleSheet.create({
      container: {
+          marginBottom: 100,
           backgroundColor: "#F5F5F8",
           flex: 1,
           justifyContent: "center",

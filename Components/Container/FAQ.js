@@ -6,7 +6,7 @@ import CloseButton from "../miscsCompontent/CloseButton";
 
 function FAQ({navigation}) {
      return (
-          <SafeAreaView style={{flex:1, alignItems:'center', marginLeft:24, marginRight:24}}>
+          <SafeAreaView style={{flex:1, alignItems:'center', marginLeft:24, marginRight:24, marginTop: 100}}>
                <ScrollView showsVerticalScrollIndicator={false}>
                <View>
                     <Text style={{fontSize:20, fontWeight:'bold', color:'green'}}>

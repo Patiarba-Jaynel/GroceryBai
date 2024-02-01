@@ -24,7 +24,6 @@ export default function OTPReset( { route,  navigation }) {
           <SafeAreaView style={style.container}>
                <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                <ScrollView>
-               <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View>
                <CloseButton navigation={navigation}/>
                <View style={{margin: 30, alignItems:'center'}}>
                     <Text variant='titleLarge' style={style.boldText}>OTP Code</Text>

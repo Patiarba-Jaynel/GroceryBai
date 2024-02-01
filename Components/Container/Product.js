@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import {TouchableOpacity, View, StyleSheet, KeyboardAvoidingView, Alert, ScrollView} from 'react-native'
+import {TouchableOpacity, View, StyleSheet, KeyboardAvoidingView, Alert, ScrollView, Platform} from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -98,6 +98,7 @@ export default function Product({route, navigation }) {
 
      return (
           <SafeAreaView style={style.container}>
+          <ScrollView>
           <View style={{justifyContent:'center'}}>
                {/*<CloseButton navigation={navigation}/>*/}
                <View style={{justifyContent:'center', alignItems:'center', flex: 2}}>
@@ -232,7 +233,6 @@ export default function Product({route, navigation }) {
                {/** this is for recommendation */}
                
                <View style={{flex: 1}}>
-                    <View style={{position:'absolute',left: 0,right: 0,top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center', elevation: 5}} ><Loading loading={isLoading}></Loading></View>
                     <View>
                          <TouchableOpacity>
                               <Text variant='labelLarge' style={{fontWeight: 'bold', marginLeft: 10, paddingBottom: 10}}>
@@ -240,8 +240,7 @@ export default function Product({route, navigation }) {
                               </Text>
                          </TouchableOpacity>
                     </View>
-                    <ScrollView horizontal={true}>
-                         <View>
+                    <ScrollView horizontal={Platform.OS == "android" ? false : true}>
                               <View style={style.itemContainer}>
                               {
                                    product.map((items, index) => {
@@ -253,11 +252,11 @@ export default function Product({route, navigation }) {
                                    })
                               }
                               </View>
-                         </View>
                     </ScrollView>
                </View>
                
           </View>
+          </ScrollView>
           </SafeAreaView>
      )
 }
@@ -272,7 +271,7 @@ const style = StyleSheet.create({
      },
      itemContainer: {
           justifyContent:'center',
-          flexDirection: 'column', 
+          flexDirection: 'row', 
           flexWrap: 'wrap',
      },
      Input: {
